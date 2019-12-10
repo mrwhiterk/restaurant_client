@@ -12,9 +12,6 @@ import setAuthJWT from './api/setAuthJWT'
 
 import { apiAuth, axiosConfig } from './api/api'
 
-
-
-
 class App extends Component {
   state = {
     isAuthenticated: false,
@@ -28,11 +25,11 @@ class App extends Component {
   handleSignupSubmit = async e => {
     e.preventDefault()
 
-    console.log('handle signup')
+    this.setFlash(false, '')
 
     if (this.state.password !== this.state.passwordConfirm) {
       alert("password confirmation doesn't match")
-      return;
+      return
     }
 
     let user = {
@@ -41,21 +38,18 @@ class App extends Component {
     }
 
     try {
-      let result = await Axios.post('/api/users/signup', user, axiosConfig);
-      let decoded = this.setAuthTokenLocalStorage(result);
+      let result = await Axios.post('/api/users/signup', user, axiosConfig)
+      let decoded = this.setAuthTokenLocalStorage(result)
       return decoded
-      
     } catch (e) {
-      console.log('error ', e)
+      if (e.message.includes('450')) {
+        this.setFlash(true, 'Email is used on an existing account')
+      }
     }
-
-
   }
 
-  setAuthTokenLocalStorage = (result) => {
+  setAuthTokenLocalStorage = result => {
     const { token } = result.data
-
-    console.log(token)
 
     localStorage.setItem('jwtToken', token)
     const decoded = jwt_decode(token)
@@ -67,8 +61,8 @@ class App extends Component {
       password: '',
       passwordConfirm: ''
     })
-    this.removeFlash()
-    
+    this.setFlash(false, '')
+
     return decoded
   }
 
@@ -84,11 +78,9 @@ class App extends Component {
       let result = await Axios.post('/api/users/login', user, axiosConfig)
       let decoded = this.setAuthTokenLocalStorage(result)
       return decoded
-
     } catch (e) {
-      
       if (e.message.includes('400')) {
-        this.setState({ showErr: true, errMessage: 'Invalid username or password' })
+        this.setFlash(true, 'Invalid username or password')
       }
     }
   }
@@ -97,12 +89,8 @@ class App extends Component {
     let data = apiAuth()
 
     if (data) {
-      this.setState({ isAuthenticated: true})
+      this.setState({ isAuthenticated: true })
     }
-  }
-
-  componentDidUpdate() {
-    
   }
 
   deleteUser = () => {
@@ -110,7 +98,7 @@ class App extends Component {
     Axios.delete('/api/users/me', axiosConfig)
       .then(result => {
         localStorage.removeItem('jwtToken')
-        this.setState({ isAuthenticated: false})
+        this.setState({ isAuthenticated: false })
       })
       .catch(error => console.log(error.response.data.message))
   }
@@ -122,17 +110,14 @@ class App extends Component {
       let result = await Axios.post('/api/users/logout', axiosConfig)
       localStorage.removeItem('jwtToken')
       this.setState({ isAuthenticated: false })
-
     } catch (e) {
       console.log('error ', e)
     }
   }
 
-  removeFlash = () => {
-    if (this.state.showErr) {
-      this.setState({ showErr: false, errMessage: '' })
-    }
-  }
+  setFlash = (showErr, errMessage) => {
+    this.setState({ showErr, errMessage }) 
+  } 
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value })
@@ -146,7 +131,7 @@ class App extends Component {
     }
 
     let errorFlash = (
-      <div class="alert alert-danger" role="alert">
+      <div className="alert alert-danger" role="alert">
         {this.state.errMessage}
       </div>
     )
@@ -183,7 +168,7 @@ class App extends Component {
         </Switch>
 
         <div className="text-center">
-          <button onClick={this.deleteUser}>delete user</button>
+          {/* <button onClick={this.deleteUser}>delete user</button> */}
           {hiddenPage}
         </div>
       </div>
