@@ -1,7 +1,32 @@
 import React from 'react'
 import './Navbar.css'
+import { Link } from 'react-router-dom'
 
 const navbar = props => {
+  let authenticateTabs = (
+    <>
+      <li className="nav-item">
+        <Link className="nav-link" to="/">
+          Login
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to="/signup">
+          Signup
+        </Link>
+      </li>
+    </>
+  )
+
+  let LogoutTab = (
+    <li className="nav-item">
+      <Link className="nav-link" to="/">
+        Logout
+      </Link>
+    </li>
+  )
+
+  console.log(props.isAuth)
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <a className="navbar-brand" href="#">
@@ -19,7 +44,7 @@ const navbar = props => {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
+        <ul className="navbar-nav NavBar">
           <li className="nav-item active">
             <a className="nav-link" href="#">
               Home <span className="sr-only">(current)</span>
@@ -35,6 +60,7 @@ const navbar = props => {
               Checkout
             </a>
           </li>
+          {props.isAuth ? LogoutTab : authenticateTabs}
         </ul>
       </div>
     </nav>

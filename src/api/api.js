@@ -4,6 +4,10 @@ import setAuthJWT from './setAuthJWT';
 
 export const apiAuth = () => {
   const token = localStorage.getItem("jwtToken")
+
+  if (!token) {
+    return false;
+  }
   const decoded = jwt_decode(token);
 
   console.log(decoded)
