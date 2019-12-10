@@ -17,6 +17,7 @@ const loginForm = (props) => {
             name="email"
             value={props.email}
             onChange={props.handleChange}
+            required
           />
         </div>
         <div className="form-group">
@@ -29,6 +30,7 @@ const loginForm = (props) => {
             name="password"
             value={props.password}
             onChange={props.handleChange}
+            required
           />
         </div>
         <button type="submit" className="btn btn-primary">

@@ -18,42 +18,40 @@ const navbar = props => {
     </>
   )
 
-  let authenticatedOperations = null;
+  let authenticatedOperations = null
   if (props.isAuth) {
     authenticatedOperations = (
-    <>
-      <li className="nav-item active">
-            <a className="nav-link" href="#">
-              Home <span className="sr-only">(current)</span>
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              Order
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              Checkout
-            </a>
-      </li>
+      <>
+        <li className="nav-item active">
+          <a className="nav-link" href="/#">
+            Home <span className="sr-only">(current)</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/#">
+            Order
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/#">
+            Checkout
+          </a>
+        </li>
       </>
-  )
-
+    )
   }
 
   let LogoutTab = (
     <li className="nav-item">
-      <Link className="nav-link" to="/">
+      <Link className="nav-link" to="#" onClick={props.logout}>
         Logout
       </Link>
     </li>
   )
 
-  console.log(props.isAuth)
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <a className="navbar-brand" href="#">
+      <a className="navbar-brand" href="/#">
         Joey's Pizza
       </a>
       <button

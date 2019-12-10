@@ -5,3 +5,8 @@
   /* align-items: center; */
 }
 
+.alert-danger {
+  width: 80%;
+  margin: 0 auto;
+}
+

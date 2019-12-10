@@ -16,6 +16,7 @@ const signupForm = props => {
           name="email"
           value={props.email}
           onChange={props.handleChange}
+          required
         />
       </div>
       <div className="form-group">
@@ -28,6 +29,20 @@ const signupForm = props => {
           name="password"
           value={props.password}
           onChange={props.handleChange}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+        <input
+          type="password"
+          className="form-control"
+          id="exampleInputPassword1"
+          placeholder="Password"
+          name="passwordConfirm"
+          value={props.passwordConfirm}
+          onChange={props.handleChange}
+          required
         />
       </div>
       <button type="submit" className="btn btn-primary">

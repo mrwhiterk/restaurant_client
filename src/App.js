@@ -10,30 +10,69 @@ import { Axios } from './api/Axios'
 import jwt_decode from 'jwt-decode'
 import setAuthJWT from './api/setAuthJWT'
 
-import { apiAuth } from './api/api'
+import { apiAuth, axiosConfig } from './api/api'
 
 
-const axiosConfig = {
-  headers: {
-    'Content-Type': 'application/json;charset=UTF-8',
-    'Access-Control-Allow-Origin': '*'
-  }
-}
+
 
 class App extends Component {
   state = {
     isAuthenticated: false,
     email: '',
-    password: ''
+    password: '',
+    passwordConfirm: '',
+    errMessage: '',
+    showErr: false
   }
 
-  handleSignupSubmit = e => {
+  handleSignupSubmit = async e => {
     e.preventDefault()
 
     console.log('handle signup')
+
+    if (this.state.password !== this.state.passwordConfirm) {
+      alert("password confirmation doesn't match")
+      return;
+    }
+
+    let user = {
+      email: this.state.email,
+      password: this.state.password
+    }
+
+    try {
+      let result = await Axios.post('/api/users/signup', user, axiosConfig);
+      let decoded = this.setAuthTokenLocalStorage(result);
+      return decoded
+      
+    } catch (e) {
+      console.log('error ', e)
+    }
+
+
   }
 
-  handleLoginSubmit = e => {
+  setAuthTokenLocalStorage = (result) => {
+    const { token } = result.data
+
+    console.log(token)
+
+    localStorage.setItem('jwtToken', token)
+    const decoded = jwt_decode(token)
+    setAuthJWT(token)
+
+    this.setState({
+      isAuthenticated: true,
+      email: '',
+      password: '',
+      passwordConfirm: ''
+    })
+    this.removeFlash()
+    
+    return decoded
+  }
+
+  handleLoginSubmit = async e => {
     e.preventDefault()
 
     let user = {
@@ -41,18 +80,17 @@ class App extends Component {
       password: this.state.password
     }
 
-    Axios.post('/api/users/login', user, axiosConfig)
-      .then(result => {
-        const { token } = result.data
+    try {
+      let result = await Axios.post('/api/users/login', user, axiosConfig)
+      let decoded = this.setAuthTokenLocalStorage(result)
+      return decoded
 
-        localStorage.setItem('jwtToken', token)
-        const decoded = jwt_decode(token)
-        setAuthJWT(token)
-
-        this.setState({ isAuthenticated: true, email: '', password: ''})
-        return decoded
-      })
-      .catch(error => console.log('dog ', error.message))
+    } catch (e) {
+      
+      if (e.message.includes('400')) {
+        this.setState({ showErr: true, errMessage: 'Invalid username or password' })
+      }
+    }
   }
 
   componentDidMount() {
@@ -63,22 +101,41 @@ class App extends Component {
     }
   }
 
-  // delete user works
+  componentDidUpdate() {
+    
+  }
+
   deleteUser = () => {
     let data = apiAuth()
     Axios.delete('/api/users/me', axiosConfig)
       .then(result => {
-        console.log(result)
         localStorage.removeItem('jwtToken')
         this.setState({ isAuthenticated: false})
       })
       .catch(error => console.log(error.response.data.message))
   }
 
+  logoutUser = async () => {
+    let applyToken = apiAuth()
+    console.log(applyToken)
+    try {
+      let result = await Axios.post('/api/users/logout', axiosConfig)
+      localStorage.removeItem('jwtToken')
+      this.setState({ isAuthenticated: false })
+
+    } catch (e) {
+      console.log('error ', e)
+    }
+  }
+
+  removeFlash = () => {
+    if (this.state.showErr) {
+      this.setState({ showErr: false, errMessage: '' })
+    }
+  }
+
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value }, () =>
-      console.log(this.state)
-    )
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -88,11 +145,16 @@ class App extends Component {
       hiddenPage = <h1>You have authenticated</h1>
     }
 
-    
+    let errorFlash = (
+      <div class="alert alert-danger" role="alert">
+        {this.state.errMessage}
+      </div>
+    )
 
     return (
       <div className="App">
-        <Navbar isAuth={this.state.isAuthenticated} />
+        <Navbar isAuth={this.state.isAuthenticated} logout={this.logoutUser} />
+        {this.state.showErr ? errorFlash : null}
         <Switch>
           <Route
             path="/"
@@ -112,6 +174,7 @@ class App extends Component {
               <SignupForm
                 email={this.state.email}
                 password={this.state.password}
+                passwordConfirm={this.state.passwordConfirm}
                 handleSubmit={this.handleSignupSubmit}
                 handleChange={this.handleChange}
               />
