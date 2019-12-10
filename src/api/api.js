@@ -5,6 +5,8 @@ import setAuthJWT from './setAuthJWT';
 export const apiAuth = () => {
   const token = localStorage.getItem("jwtToken")
   const decoded = jwt_decode(token);
+
+  console.log(decoded)
   const currentTime = Date.now() / 1000;
 
   if (decoded.exp < currentTime) {
@@ -17,11 +19,12 @@ export const apiAuth = () => {
     setAuthJWT(token);
 
     const user = {
-      id: decoded.id,
-      email: decoded.email
+      id: decoded._id
     }
 
     return user;
   }
 
 }
+
+
