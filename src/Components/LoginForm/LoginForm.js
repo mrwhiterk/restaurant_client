@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import './LoginForm.css'
 
-class LoginForm extends Component {
-  render() {
+const loginForm = (props) => {
+
     return (
-      <form className="LoginForm">
+      <form className="LoginForm" onSubmit={props.handleSubmit}>
         <h2>Login</h2>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Email address</label>
@@ -14,6 +14,9 @@ class LoginForm extends Component {
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
             placeholder="Enter email"
+            name="email"
+            value={props.email}
+            onChange={props.handleChange}
           />
         </div>
         <div className="form-group">
@@ -23,6 +26,9 @@ class LoginForm extends Component {
             className="form-control"
             id="exampleInputPassword1"
             placeholder="Password"
+            name="password"
+            value={props.password}
+            onChange={props.handleChange}
           />
         </div>
         <button type="submit" className="btn btn-primary">
@@ -30,7 +36,7 @@ class LoginForm extends Component {
         </button>
       </form>
     )
-  }
+  
 }
 
-export default LoginForm
+export default loginForm
