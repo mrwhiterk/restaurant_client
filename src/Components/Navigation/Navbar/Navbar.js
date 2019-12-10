@@ -18,6 +18,30 @@ const navbar = props => {
     </>
   )
 
+  let authenticatedOperations = null;
+  if (props.isAuth) {
+    authenticatedOperations = (
+    <>
+      <li className="nav-item active">
+            <a className="nav-link" href="#">
+              Home <span className="sr-only">(current)</span>
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="#">
+              Order
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="#">
+              Checkout
+            </a>
+      </li>
+      </>
+  )
+
+  }
+
   let LogoutTab = (
     <li className="nav-item">
       <Link className="nav-link" to="/">
@@ -45,21 +69,7 @@ const navbar = props => {
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav NavBar">
-          <li className="nav-item active">
-            <a className="nav-link" href="#">
-              Home <span className="sr-only">(current)</span>
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              Order
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              Checkout
-            </a>
-          </li>
+          {authenticatedOperations}
           {props.isAuth ? LogoutTab : authenticateTabs}
         </ul>
       </div>
