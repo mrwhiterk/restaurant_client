@@ -13,6 +13,7 @@ import setAuthJWT from './api/setAuthJWT'
 
 import { apiAuth, axiosConfig, logoutUser } from './api/api'
 import { setFlash } from './helperMethods'
+// import { Button } from 'react-bootstrap';
 
 class App extends Component {
   state = {
@@ -158,13 +159,16 @@ class App extends Component {
           logout={logoutUser.bind(this)}
         />
         {this.state.showErr ? errorFlash : null}
-        {this.state.isAuthenticated ? <Route path="/" component={Menu} /> : null}
+        {this.state.isAuthenticated ? (
+          <Route path="/" component={Menu} />
+          ) : null}
         <Switch>
           {!this.state.isAuthenticated ? authForms : null}
           <Redirect from="/" to="/" />
         </Switch>
 
         <div className="text-center">
+          
           {/* <button onClick={this.deleteUser}>delete user</button> */}
           {/* {hiddenPage} */}
         </div>

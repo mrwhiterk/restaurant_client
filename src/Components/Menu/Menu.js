@@ -2,58 +2,129 @@ import React, { Component } from 'react'
 import './Menu.css'
 
 import MiniCart from './MiniCart/MiniCart'
+import { Button } from 'react-bootstrap'
+import Modal from '../UI/Modal/Modal'
 
 class Menu extends Component {
   state = {
-    currentOrder: []
+    currentOrder: [],
+    show: false,
+    menu: {
+      Pies: [
+        {
+          name: 'Ol Faithful',
+          price: 9.0
+        },
+        {
+          name: 'Meat Lover',
+          price: 10.0
+        },
+        {
+          name: 'Veggie Supreme',
+          price: 8.0
+        }
+      ],
+
+      Pasta: [
+        {
+          name: 'Spaghetti',
+          price: 7.5
+        },
+        {
+          name: 'Alfredo',
+          price: 10.0
+        },
+        {
+          name: 'Bologonese',
+          price: 9.5
+        }
+      ],
+
+      Drinks: [
+        {
+          name: 'Coke',
+          price: 2.5
+        },
+        {
+          name: 'Sprite',
+          price: 2.0
+        },
+        {
+          name: 'Lemonade',
+          price: 1.5
+        }
+      ]
+    },
+    currentMenuItem: null
+  }
+
+  handleShow = () => {
+    this.setState({ show: true })
+  }
+
+  handleClose = () => {
+    this.setState({ show: false })
+  }
+
+  handleSelectMenuItem = (name, price) => {
+    this.setState(
+      {
+        currentMenuItem: {
+          name,
+          price
+        }
+      },
+      () => {
+        this.handleShow()
+      }
+    )
   }
 
   render() {
+    let menuList = []
+    for (const key in this.state.menu) {
+      if (this.state.menu.hasOwnProperty(key)) {
+        const menuSectionTitle = key
+
+        menuList.push(
+          <React.Fragment key={key}>
+            <h4>{menuSectionTitle}</h4>
+            <hr />
+            {this.state.menu[menuSectionTitle].map(item => {
+              return (
+                <li
+                  className="list-group-item border-0"
+                  key={item.name}
+                  onClick={() =>
+                    this.handleSelectMenuItem(item.name, item.price)
+                  }
+                >
+                  {item.name}
+                  <span>$ {item.price.toFixed(2)}</span>
+                </li>
+              )
+            })}
+          </React.Fragment>
+        )
+      }
+    }
+
     return (
       <div className="Menu">
-        <div className="row">
-          <div className="col-8">
-            <h4>Signature Pies</h4>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">
-                Ol Faithful<span>9.00</span>
-              </li>
-              <li className="list-group-item">
-                Meat Lover<span>10.00</span>
-              </li>
-              <li className="list-group-item">
-                Veggie Supreme<span>8.00</span>
-              </li>
-            </ul>
-            <br />
-            <h4>Pasta</h4>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">
-                Spaghetti<span>7.50</span>
-              </li>
-              <li className="list-group-item">
-                Alfredo<span>10.00</span>
-              </li>
-              <li className="list-group-item">
-                Bologonese<span>9.50</span>
-              </li>
-            </ul>
-            <br />
-            <h4>Drinks</h4>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">
-                Coke<span>2.50</span>
-              </li>
-              <li className="list-group-item">
-                Sprite<span>2.00</span>
-              </li>
-              <li className="list-group-item">
-                Lemonade<span>1.50</span>
-              </li>
-            </ul>
-          </div>
+        
+        {this.state.currentMenuItem ? (
+          <Modal
+            handleClose={this.handleClose}
+            show={this.state.show}
+            itemName={this.state.currentMenuItem.name}
+            itemPrice={this.state.currentMenuItem.price}
+          />
+        ) : null}
 
-          <div className="col-4">
+        <div className="row">
+          <div className="col-8">{menuList}</div>
+
+          <div className="col-4 border-left">
             <MiniCart />
           </div>
         </div>
