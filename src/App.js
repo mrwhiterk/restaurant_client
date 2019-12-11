@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Link, Route, Switch } from 'react-router-dom'
+import { Link, Route, Switch, Redirect } from 'react-router-dom'
 
 import LoginForm from './Components/LoginForm/LoginForm'
 import SignupForm from './Components/SignupForm/SignupForm'
 import Navbar from './Components/Navigation/Navbar/Navbar'
+import Menu from './Components/Menu/Menu'
 
 import { Axios } from './api/Axios'
 import jwt_decode from 'jwt-decode'
 import setAuthJWT from './api/setAuthJWT'
 
-import { apiAuth, axiosConfig } from './api/api'
+import { apiAuth, axiosConfig, logoutUser } from './api/api'
+import { setFlash } from './helperMethods'
 
 class App extends Component {
   state = {
@@ -25,10 +27,10 @@ class App extends Component {
   handleSignupSubmit = async e => {
     e.preventDefault()
 
-    this.setFlash(false, '')
+    setFlash.call(this, false, '')
 
     if (this.state.password !== this.state.passwordConfirm) {
-      alert("password confirmation doesn't match")
+      setFlash.call(this, true, "password confirmation doesn't match")
       return
     }
 
@@ -43,7 +45,7 @@ class App extends Component {
       return decoded
     } catch (e) {
       if (e.message.includes('450')) {
-        this.setFlash(true, 'Email is used on an existing account')
+        setFlash.call(this, true, 'Email is used on an existing account')
       }
     }
   }
@@ -61,7 +63,7 @@ class App extends Component {
       password: '',
       passwordConfirm: ''
     })
-    this.setFlash(false, '')
+    setFlash.call(this, false, '')
 
     return decoded
   }
@@ -80,7 +82,7 @@ class App extends Component {
       return decoded
     } catch (e) {
       if (e.message.includes('400')) {
-        this.setFlash(true, 'Invalid username or password')
+        setFlash.call(this, true, 'Invalid username or password')
       }
     }
   }
@@ -103,22 +105,6 @@ class App extends Component {
       .catch(error => console.log(error.response.data.message))
   }
 
-  logoutUser = async () => {
-    let applyToken = apiAuth()
-    console.log(applyToken)
-    try {
-      let result = await Axios.post('/api/users/logout', axiosConfig)
-      localStorage.removeItem('jwtToken')
-      this.setState({ isAuthenticated: false })
-    } catch (e) {
-      console.log('error ', e)
-    }
-  }
-
-  setFlash = (showErr, errMessage) => {
-    this.setState({ showErr, errMessage }) 
-  } 
-
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -136,40 +122,51 @@ class App extends Component {
       </div>
     )
 
+    let authForms = (
+      <>
+        <Route
+          path="/"
+          exact
+          render={() => (
+            <LoginForm
+              email={this.state.email}
+              password={this.state.password}
+              handleSubmit={this.handleLoginSubmit}
+              handleChange={this.handleChange}
+            />
+          )}
+        />
+        <Route
+          path="/signup"
+          render={() => (
+            <SignupForm
+              email={this.state.email}
+              password={this.state.password}
+              passwordConfirm={this.state.passwordConfirm}
+              handleSubmit={this.handleSignupSubmit}
+              handleChange={this.handleChange}
+            />
+          )}
+        />
+      </>
+    )
+
     return (
       <div className="App">
-        <Navbar isAuth={this.state.isAuthenticated} logout={this.logoutUser} />
+        <Navbar
+          isAuth={this.state.isAuthenticated}
+          logout={logoutUser.bind(this)}
+        />
         {this.state.showErr ? errorFlash : null}
+        {this.state.isAuthenticated ? <Route path="/" component={Menu} /> : null}
         <Switch>
-          <Route
-            path="/"
-            exact
-            render={() => (
-              <LoginForm
-                email={this.state.email}
-                password={this.state.password}
-                handleSubmit={this.handleLoginSubmit}
-                handleChange={this.handleChange}
-              />
-            )}
-          />
-          <Route
-            path="/signup"
-            render={() => (
-              <SignupForm
-                email={this.state.email}
-                password={this.state.password}
-                passwordConfirm={this.state.passwordConfirm}
-                handleSubmit={this.handleSignupSubmit}
-                handleChange={this.handleChange}
-              />
-            )}
-          />
+          {!this.state.isAuthenticated ? authForms : null}
+          <Redirect from="/" to="/" />
         </Switch>
 
         <div className="text-center">
           {/* <button onClick={this.deleteUser}>delete user</button> */}
-          {hiddenPage}
+          {/* {hiddenPage} */}
         </div>
       </div>
     )

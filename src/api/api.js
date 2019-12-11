@@ -1,34 +1,47 @@
-import { axios } from './Axios';
-import jwt_decode from 'jwt-decode';
-import setAuthJWT from './setAuthJWT';
+import { Axios } from './Axios'
+import jwt_decode from 'jwt-decode'
+import setAuthJWT from './setAuthJWT'
 
 export const apiAuth = () => {
-  const token = localStorage.getItem("jwtToken")
+  const token = localStorage.getItem('jwtToken')
 
   if (!token) {
-    return false;
+    return false
   }
-  const decoded = jwt_decode(token);
+  const decoded = jwt_decode(token)
 
-  console.log(decoded)
-  const currentTime = Date.now() / 1000;
+  const currentTime = Date.now() / 1000
 
   if (decoded.exp < currentTime) {
-    localStorage.removeItem("jwtToken")
+    localStorage.removeItem('jwtToken')
 
     setAuthJWT(null)
 
-    return false;
+    return false
   } else {
-    setAuthJWT(token);
+    setAuthJWT(token)
 
     const user = {
       id: decoded._id
     }
 
-    return user;
+    return user
   }
+}
 
+export const logoutUser = async function() {
+  console.log('hit')
+  let applyToken = apiAuth()
+  console.log(applyToken)
+
+  try {
+    console.log(this)
+    localStorage.removeItem('jwtToken')
+    this.setState({ isAuthenticated: false, errMessage: '', showErr: false })
+    let result = await Axios.post('/api/users/logout', axiosConfig)
+  } catch (e) {
+    console.log('error ', e)
+  }
 }
 
 export const axiosConfig = {
@@ -37,4 +50,3 @@ export const axiosConfig = {
     'Access-Control-Allow-Origin': '*'
   }
 }
-
