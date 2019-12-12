@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Link, Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 import LoginForm from './Components/LoginForm/LoginForm'
 import SignupForm from './Components/SignupForm/SignupForm'
@@ -97,7 +97,7 @@ class App extends Component {
   }
 
   deleteUser = () => {
-    let data = apiAuth()
+    apiAuth()
     Axios.delete('/api/users/me', axiosConfig)
       .then(result => {
         localStorage.removeItem('jwtToken')
@@ -111,11 +111,11 @@ class App extends Component {
   }
 
   render() {
-    let hiddenPage = <h1>Not authenticated</h1>
+    // let hiddenPage = <h1>Not authenticated</h1>
 
-    if (this.state.isAuthenticated) {
-      hiddenPage = <h1>You have authenticated</h1>
-    }
+    // if (this.state.isAuthenticated) {
+    //   hiddenPage = <h1>You have authenticated</h1>
+    // }
 
     let errorFlash = (
       <div className="alert alert-danger" role="alert">

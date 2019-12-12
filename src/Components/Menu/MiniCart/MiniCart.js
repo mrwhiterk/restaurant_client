@@ -1,15 +1,22 @@
 import React from 'react'
 
-const miniCart = () => {
+import CartItem from './CartItem/CartItem'
+
+const miniCart = props => {
+  let cartItems = props.currentOrder.map(item => (
+    <CartItem
+      key={item.name}
+      name={item.name}
+      quantity={item.quantity}
+      totalPrice={item.totalPrice}
+    />
+  ))
+
+
   return (
     <div className="MiniCart">
       <h4>Your Cart</h4>
-      <ul className="list-group">
-        <li className="list-group-item d-flex justify-content-between align-items-center">
-          Cras justo odio
-          <span className="badge badge-primary badge-pill">1</span>
-        </li>
-      </ul>
+      <ul className="list-group">{cartItems}</ul>
     </div>
   )
 }

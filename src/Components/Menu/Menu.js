@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 import './Menu.css'
 
 import MiniCart from './MiniCart/MiniCart'
-import { Button } from 'react-bootstrap'
 import Modal from '../UI/Modal/Modal'
+import { Button } from 'react-bootstrap'
+
+import { Axios } from '../../api/Axios'
+
+import { apiAuth, axiosConfig, logoutUser } from '../../api/api'
 
 class Menu extends Component {
   state = {
@@ -80,6 +84,59 @@ class Menu extends Component {
     )
   }
 
+  handleSubmit = (quantity, totalPrice) => {
+    this.handleClose()
+
+    let data = {
+      ...this.state.currentMenuItem,
+      quantity,
+      totalPrice
+    }
+
+    let existingItemIdx = this.state.currentOrder.findIndex(item => {
+      return item.name === data.name
+    })
+
+    if (existingItemIdx > -1) {
+      this.setState(prevState => {
+        let newCurrentOrder = [...this.state.currentOrder]
+        let currentItemObj = { ...this.state.currentOrder[existingItemIdx] }
+
+        currentItemObj.quantity += +data.quantity
+        currentItemObj.totalPrice += +data.totalPrice
+
+        newCurrentOrder[existingItemIdx] = currentItemObj
+
+        return {
+          currentOrder: newCurrentOrder,
+          currentMenuItem: null
+        }
+      })
+    } else {
+      this.setState(prevState => ({
+        currentOrder: [...prevState.currentOrder, data]
+      }), () => this.saveOrderInProgress())
+    }
+  }
+
+  saveOrderInProgress = async () => {
+    let data = apiAuth()
+    // console.log(this.state.currentOrder)
+    console.log(data)
+
+    if (!data.id) return
+    
+    try {
+      let result = await Axios.post('/api/users/saveOrder', this.state.currentOrder, axiosConfig)
+
+      console.log(result)
+
+    } catch (e) {
+      console.log(e)
+    }
+
+  }
+
   render() {
     let menuList = []
     for (const key in this.state.menu) {
@@ -111,10 +168,10 @@ class Menu extends Component {
 
     return (
       <div className="Menu">
-        
         {this.state.currentMenuItem ? (
           <Modal
             handleClose={this.handleClose}
+            handleSubmit={this.handleSubmit}
             show={this.state.show}
             itemName={this.state.currentMenuItem.name}
             itemPrice={this.state.currentMenuItem.price}
@@ -125,7 +182,10 @@ class Menu extends Component {
           <div className="col-8">{menuList}</div>
 
           <div className="col-4 border-left">
-            <MiniCart />
+            <MiniCart currentOrder={this.state.currentOrder} />
+            {/* <Button variant="warning" onClick={this.saveOrderInProgress}>
+              Save
+            </Button> */}
           </div>
         </div>
       </div>

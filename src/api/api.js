@@ -30,15 +30,13 @@ export const apiAuth = () => {
 }
 
 export const logoutUser = async function() {
-  console.log('hit')
-  let applyToken = apiAuth()
-  console.log(applyToken)
+  apiAuth()
 
   try {
-    console.log(this)
+    // console.log(this)
     localStorage.removeItem('jwtToken')
     this.setState({ isAuthenticated: false, errMessage: '', showErr: false })
-    let result = await Axios.post('/api/users/logout', axiosConfig)
+    await Axios.post('/api/users/logout', axiosConfig)
   } catch (e) {
     console.log('error ', e)
   }

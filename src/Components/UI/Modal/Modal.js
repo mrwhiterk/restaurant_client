@@ -21,6 +21,8 @@ class MenuModal extends Component {
       )
     }
 
+    let totalPrice = this.props.itemPrice * this.state.quantity
+
     return (
       <Modal show={this.props.show} onHide={this.props.handleClose}>
         <Modal.Header closeButton>
@@ -36,9 +38,9 @@ class MenuModal extends Component {
               <div>$ {this.props.itemPrice.toFixed(2)}</div>
             </div>
             <div className="col-4">
-              <div class="input-group">
+              <div className="input-group">
                 <select
-                  class="custom-select"
+                  className="custom-select"
                   id="inputGroupSelect04"
                   onChange={this.setQuantity}
                 >
@@ -52,16 +54,19 @@ class MenuModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <div className="d-flex justify-content-between row w-100 align-items-center">
-            <div>
-              Total: $ {(this.props.itemPrice * this.state.quantity).toFixed(2)}
-            </div>
+            <div>Total: $ {totalPrice.toFixed(2)}</div>
             <div>
               <Button variant="secondary" onClick={this.props.handleClose}>
                 Close
               </Button>
 
               {this.state.quantity > 0 && (
-                <Button variant="success" onClick={this.props.handleSubmit}>
+                <Button
+                  variant="success"
+                  onClick={() =>
+                    this.props.handleSubmit(+this.state.quantity, totalPrice)
+                  }
+                >
                   Add to Cart
                 </Button>
               )}
