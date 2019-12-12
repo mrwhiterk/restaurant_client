@@ -121,8 +121,6 @@ class Menu extends Component {
 
   saveOrderInProgress = async () => {
     let data = apiAuth()
-    // console.log(this.state.currentOrder)
-    console.log(data)
 
     if (!data.id) return
     
@@ -134,6 +132,24 @@ class Menu extends Component {
     } catch (e) {
       console.log(e)
     }
+
+  }
+
+  componentDidMount = async () => {
+    let data = apiAuth()
+
+     if (!data.id) return
+
+     try {
+       let result = await Axios.get(
+         '/api/users/getOrder',
+         axiosConfig
+       )
+
+       this.setState({ currentOrder: result.data})
+     } catch (e) {
+       console.log(e)
+     }
 
   }
 
