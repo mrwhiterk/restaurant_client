@@ -13,7 +13,6 @@ import setAuthJWT from './api/setAuthJWT'
 
 import { apiAuth, axiosConfig, logoutUser } from './api/api'
 import { setFlash } from './helperMethods'
-// import { Button } from 'react-bootstrap';
 
 class App extends Component {
   state = {

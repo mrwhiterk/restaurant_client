@@ -7,7 +7,9 @@ import { Button } from 'react-bootstrap'
 
 import { Axios } from '../../api/Axios'
 
-import { apiAuth, axiosConfig, logoutUser } from '../../api/api'
+import { apiAuth, axiosConfig } from '../../api/api'
+
+import { IoMdCloseCircle } from 'react-icons/io'
 
 class Menu extends Component {
   state = {
@@ -199,9 +201,7 @@ class Menu extends Component {
 
           <div className="col-4 border-left">
             <MiniCart currentOrder={this.state.currentOrder} />
-            {/* <Button variant="warning" onClick={this.saveOrderInProgress}>
-              Save
-            </Button> */}
+            <IoMdCloseCircle />
           </div>
         </div>
       </div>

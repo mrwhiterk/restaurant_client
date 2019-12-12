@@ -1,6 +1,8 @@
 import React from 'react'
 import './LoginForm.css'
 
+import PropTypes from 'prop-types'
+
 const loginForm = (props) => {
 
     return (
@@ -39,6 +41,13 @@ const loginForm = (props) => {
       </form>
     )
   
+}
+
+loginForm.propTypes = {
+  handleSubmit: PropTypes.func,
+  email: PropTypes.string,
+  handleChange: PropTypes.func,
+  password: PropTypes.string,
 }
 
 export default loginForm

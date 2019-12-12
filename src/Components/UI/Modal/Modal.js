@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Button } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 
 class MenuModal extends Component {
   state = {
@@ -76,6 +77,13 @@ class MenuModal extends Component {
       </Modal>
     )
   }
+}
+
+MenuModal.propTypes = {
+  itemPrice: PropTypes.number,
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  itemName: PropTypes.string
 }
 
 export default MenuModal
