@@ -8,8 +8,7 @@ import { Button } from 'react-bootstrap'
 import { Axios } from '../../api/Axios'
 
 import { apiAuth, axiosConfig } from '../../api/api'
-
-import { IoMdCloseCircle } from 'react-icons/io'
+import DeleteCartItemModal from '../UI/Modal/DeleteCartItemModal/DeleteCartItemModal'
 
 class Menu extends Component {
   state = {
@@ -61,7 +60,9 @@ class Menu extends Component {
         }
       ]
     },
-    currentMenuItem: null
+    currentMenuItem: null,
+    currentDeleteItem: null,
+    showDeleteModal: false
   }
 
   handleShow = () => {
@@ -70,6 +71,10 @@ class Menu extends Component {
 
   handleClose = () => {
     this.setState({ show: false })
+  }
+
+  handleDeleteModalClose = () => {
+    this.setState({ showDeleteModal: false, currentDeleteItem: null })
   }
 
   handleSelectMenuItem = (name, price) => {
@@ -115,9 +120,12 @@ class Menu extends Component {
         }
       })
     } else {
-      this.setState(prevState => ({
-        currentOrder: [...prevState.currentOrder, data]
-      }), () => this.saveOrderInProgress())
+      this.setState(
+        prevState => ({
+          currentOrder: [...prevState.currentOrder, data]
+        }),
+        () => this.saveOrderInProgress()
+      )
     }
   }
 
@@ -125,34 +133,58 @@ class Menu extends Component {
     let data = apiAuth()
 
     if (!data.id) return
-    
+
     try {
-      let result = await Axios.post('/api/users/saveOrder', this.state.currentOrder, axiosConfig)
+      let result = await Axios.post(
+        '/api/users/saveOrder',
+        this.state.currentOrder,
+        axiosConfig
+      )
 
       console.log(result)
-
     } catch (e) {
       console.log(e)
     }
-
   }
 
   componentDidMount = async () => {
     let data = apiAuth()
 
-     if (!data.id) return
+    if (!data.id) return
 
-     try {
-       let result = await Axios.get(
-         '/api/users/getOrder',
-         axiosConfig
-       )
+    try {
+      let result = await Axios.get('/api/users/getOrder', axiosConfig)
 
-       this.setState({ currentOrder: result.data})
-     } catch (e) {
-       console.log(e)
-     }
+      this.setState({ currentOrder: result.data })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
+  deleteCartItem = async (e, name) => {
+    let data = apiAuth()
+    if (!data.id) return
+
+    try {
+      let result = await Axios.delete(
+        `/api/users/orderItem/${name}`,
+        axiosConfig
+      )
+
+      this.setState({
+        currentOrder: result.data.currentOrder,
+        showDeleteModal: false,
+        currentDeleteItem: null
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  renderCartModal = async (e, name) => {
+    this.setState({ currentDeleteItem: name }, () => {
+      this.setState({ showDeleteModal: true })
+    })
   }
 
   render() {
@@ -196,12 +228,24 @@ class Menu extends Component {
           />
         ) : null}
 
+        {this.state.showDeleteModal ? (
+          <DeleteCartItemModal
+            show={this.state.showDeleteModal}
+            title="Delete Cart Item"
+            cartItemName={this.state.currentDeleteItem}
+            deleteCartItem={this.deleteCartItem}
+            handleClose={this.handleDeleteModalClose}
+          />
+        ) : null}
+
         <div className="row">
           <div className="col-8">{menuList}</div>
 
           <div className="col-4 border-left">
-            <MiniCart currentOrder={this.state.currentOrder} />
-            <IoMdCloseCircle />
+            <MiniCart
+              currentOrder={this.state.currentOrder}
+              renderCartModal={this.renderCartModal}
+            />
           </div>
         </div>
       </div>

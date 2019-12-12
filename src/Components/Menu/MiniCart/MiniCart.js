@@ -9,6 +9,7 @@ const miniCart = props => {
       name={item.name}
       quantity={item.quantity}
       totalPrice={item.totalPrice}
+      renderCartModal={props.renderCartModal}
     />
   ))
 
