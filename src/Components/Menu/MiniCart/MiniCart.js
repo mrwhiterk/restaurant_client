@@ -7,9 +7,11 @@ const miniCart = props => {
     <CartItem
       key={item.name}
       name={item.name}
+      price={item.price}
       quantity={item.quantity}
       totalPrice={item.totalPrice}
       renderCartModal={props.renderCartModal}
+      handleSelectMenuItem={props.handleSelectMenuItem}
     />
   ))
 

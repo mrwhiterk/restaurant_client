@@ -8,7 +8,7 @@ const deleteCartItemModal = (props) => {
         <Modal.Title>{props.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="">
+        <div>
           Are you sure you want to remove {props.cartItemName}?
         </div>
       </Modal.Body>

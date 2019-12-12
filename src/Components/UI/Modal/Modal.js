@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 class MenuModal extends Component {
   state = {
-    quantity: 1
+    quantity: this.props.currentItemEditMode ? this.props.currentItemEditMode.quantity : 1
   }
 
   setQuantity = e => {
@@ -14,7 +14,7 @@ class MenuModal extends Component {
   render() {
     let options = []
 
-    for (let i = 2; i <= 10; i++) {
+    for (let i = 1; i <= 10; i++) {
       options.push(
         <option value={i} key={i}>
           {i}
@@ -24,8 +24,11 @@ class MenuModal extends Component {
 
     let totalPrice = this.props.itemPrice * this.state.quantity
 
+    // console.log(this.props.currentItemEditMode)
+
     return (
       <Modal show={this.props.show} onHide={this.props.handleClose}>
+        
         <Modal.Header closeButton>
           <Modal.Title>Add to Cart</Modal.Title>
         </Modal.Header>
@@ -46,7 +49,7 @@ class MenuModal extends Component {
                   onChange={this.setQuantity}
                 >
                   <option>0</option>
-                  <option selected>1</option>
+                  <option selected>{this.props.currentItemEditMode ? this.props.currentItemEditMode.quantity + '(current)' : 1}</option>
                   {options}
                 </select>
               </div>
@@ -65,7 +68,7 @@ class MenuModal extends Component {
                 <Button
                   variant="success"
                   onClick={() =>
-                    this.props.handleSubmit(+this.state.quantity, totalPrice)
+                    this.props.handleSubmit(+this.state.quantity, totalPrice, this.props.currentItemEditMode)
                   }
                 >
                   Add to Cart

@@ -62,7 +62,8 @@ class Menu extends Component {
     },
     currentMenuItem: null,
     currentDeleteItem: null,
-    showDeleteModal: false
+    showDeleteModal: false,
+    currentItemEditMode: null
   }
 
   handleShow = () => {
@@ -77,21 +78,41 @@ class Menu extends Component {
     this.setState({ showDeleteModal: false, currentDeleteItem: null })
   }
 
-  handleSelectMenuItem = (name, price) => {
-    this.setState(
-      {
-        currentMenuItem: {
-          name,
-          price
+  handleSelectMenuItem = (name, price, isEditing) => {
+    if (isEditing) {
+      let idx = this.state.currentOrder.findIndex(item => item.name === name)
+      let currentOrderItem = [...this.state.currentOrder][idx]
+
+      console.log(currentOrderItem)
+
+      this.setState(
+        {
+          currentMenuItem: {
+            name,
+            price
+          },
+          currentItemEditMode: currentOrderItem
+        },
+        () => {
+          this.handleShow()
         }
-      },
-      () => {
-        this.handleShow()
-      }
-    )
+      )
+    } else {
+      this.setState(
+        {
+          currentMenuItem: {
+            name,
+            price
+          }
+        },
+        () => {
+          this.handleShow()
+        }
+      )
+    }
   }
 
-  handleSubmit = (quantity, totalPrice) => {
+  handleSubmit = (quantity, totalPrice, editObj) => {
     this.handleClose()
 
     let data = {
@@ -109,8 +130,13 @@ class Menu extends Component {
         let newCurrentOrder = [...this.state.currentOrder]
         let currentItemObj = { ...this.state.currentOrder[existingItemIdx] }
 
-        currentItemObj.quantity += +data.quantity
-        currentItemObj.totalPrice += +data.totalPrice
+        if (editObj) {
+          currentItemObj.quantity = +data.quantity
+          currentItemObj.totalPrice = +data.totalPrice
+        } else {
+          currentItemObj.quantity += +data.quantity
+          currentItemObj.totalPrice += +data.totalPrice
+        }
 
         newCurrentOrder[existingItemIdx] = currentItemObj
 
@@ -118,13 +144,18 @@ class Menu extends Component {
           currentOrder: newCurrentOrder,
           currentMenuItem: null
         }
+      }, () => {
+          this.saveOrderInProgress()
+          this.setState({ currentItemEditMode: null })
       })
     } else {
       this.setState(
         prevState => ({
           currentOrder: [...prevState.currentOrder, data]
         }),
-        () => this.saveOrderInProgress()
+        () => {
+          this.saveOrderInProgress()
+        }
       )
     }
   }
@@ -200,7 +231,7 @@ class Menu extends Component {
             {this.state.menu[menuSectionTitle].map(item => {
               return (
                 <li
-                  className="list-group-item border-0"
+                  className="list-group-item border-0 MenuItem"
                   key={item.name}
                   onClick={() =>
                     this.handleSelectMenuItem(item.name, item.price)
@@ -218,13 +249,24 @@ class Menu extends Component {
 
     return (
       <div className="Menu">
-        {this.state.currentMenuItem ? (
+        {this.state.currentMenuItem && !this.state.currentItemEditMode ? (
           <Modal
             handleClose={this.handleClose}
             handleSubmit={this.handleSubmit}
             show={this.state.show}
             itemName={this.state.currentMenuItem.name}
             itemPrice={this.state.currentMenuItem.price}
+          />
+        ) : null}
+
+        {this.state.currentMenuItem && this.state.currentItemEditMode ? (
+          <Modal
+            handleClose={this.handleClose}
+            handleSubmit={this.handleSubmit}
+            show={this.state.show}
+            itemName={this.state.currentMenuItem.name}
+            itemPrice={this.state.currentMenuItem.price}
+            currentItemEditMode={this.state.currentItemEditMode}
           />
         ) : null}
 
@@ -245,6 +287,7 @@ class Menu extends Component {
             <MiniCart
               currentOrder={this.state.currentOrder}
               renderCartModal={this.renderCartModal}
+              handleSelectMenuItem={this.handleSelectMenuItem}
             />
           </div>
         </div>
