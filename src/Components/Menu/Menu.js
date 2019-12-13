@@ -7,9 +7,12 @@ import { Button } from 'react-bootstrap'
 
 import { Axios } from '../../api/Axios'
 
-import { apiAuth, axiosConfig } from '../../api/api'
+import { apiAuth, axiosConfig, submitOrder } from '../../api/api'
 import DeleteCartItemModal from '../UI/Modal/DeleteCartItemModal/DeleteCartItemModal'
 import CheckoutModal from '../UI/Modal/CheckoutModal/CheckoutModal'
+import { Route } from 'react-router-dom'
+
+import Orders from '../Orders/Orders'
 
 class Menu extends Component {
   state = {
@@ -84,8 +87,12 @@ class Menu extends Component {
     this.setState({ showCheckoutModal: false })
   }
 
-  handleCheckoutSubmit = () => {
-    console.log('handle checkout submit')
+  handleCheckoutSubmit = async () => {
+    this.setState({ showCheckoutModal: false })
+
+    let result = await submitOrder(this.state.currentOrder)
+
+    this.props.history.push('/orders')
   }
 
   handleSelectMenuItem = (name, price, isEditing) => {
@@ -265,6 +272,7 @@ class Menu extends Component {
 
     return (
       <div className="Menu">
+        {/* <Route path="/orders" component={Orders} /> */}
         {this.state.currentMenuItem && !this.state.currentItemEditMode ? (
           <Modal
             handleClose={this.handleClose}
@@ -319,9 +327,11 @@ class Menu extends Component {
                 handleSelectMenuItem={this.handleSelectMenuItem}
               />
             </div>
-            {this.state.currentOrder.length ? <Button variant="outline-primary" onClick={this.orderCheckout}>
-              Place Order
-            </Button> : null}
+            {this.state.currentOrder.length ? (
+              <Button variant="outline-primary" onClick={this.orderCheckout}>
+                Place Order
+              </Button>
+            ) : null}
           </div>
         </div>
       </div>

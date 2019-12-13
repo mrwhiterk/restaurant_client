@@ -6,6 +6,7 @@ import LoginForm from './Components/LoginForm/LoginForm'
 import SignupForm from './Components/SignupForm/SignupForm'
 import Navbar from './Components/Navigation/Navbar/Navbar'
 import Menu from './Components/Menu/Menu'
+import Orders from './Components/Orders/Orders'
 
 import { Axios } from './api/Axios'
 import jwt_decode from 'jwt-decode'
@@ -124,30 +125,33 @@ class App extends Component {
 
     let authForms = (
       <>
-        <Route
-          path="/"
-          exact
-          render={() => (
-            <LoginForm
-              email={this.state.email}
-              password={this.state.password}
-              handleSubmit={this.handleLoginSubmit}
-              handleChange={this.handleChange}
-            />
-          )}
-        />
-        <Route
-          path="/signup"
-          render={() => (
-            <SignupForm
-              email={this.state.email}
-              password={this.state.password}
-              passwordConfirm={this.state.passwordConfirm}
-              handleSubmit={this.handleSignupSubmit}
-              handleChange={this.handleChange}
-            />
-          )}
-        />
+        <Switch>
+          <Route
+            path="/signup"
+            render={() => (
+              <SignupForm
+                email={this.state.email}
+                password={this.state.password}
+                passwordConfirm={this.state.passwordConfirm}
+                handleSubmit={this.handleSignupSubmit}
+                handleChange={this.handleChange}
+              />
+            )}
+          />
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <LoginForm
+                email={this.state.email}
+                password={this.state.password}
+                handleSubmit={this.handleLoginSubmit}
+                handleChange={this.handleChange}
+              />
+            )}
+          />
+          {/* <Redirect from="/" to="/" /> */}
+        </Switch>
       </>
     )
 
@@ -159,15 +163,18 @@ class App extends Component {
         />
         {this.state.showErr ? errorFlash : null}
         {this.state.isAuthenticated ? (
-          <Route path="/" component={Menu} />
-          ) : null}
+          <>
+            <Switch>
+              <Route path="/orders" component={Orders} />
+              <Route path="/" exact component={Menu} />
+            </Switch>
+          </>
+        ) : null}
         <Switch>
           {!this.state.isAuthenticated ? authForms : null}
-          <Redirect from="/" to="/" />
         </Switch>
 
         <div className="text-center">
-          
           {/* <button onClick={this.deleteUser}>delete user</button> */}
           {/* {hiddenPage} */}
         </div>

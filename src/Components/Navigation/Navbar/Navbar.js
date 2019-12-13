@@ -67,7 +67,7 @@ const navbar = props => {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav NavBar d-flex justify-content-between w-100">
+        <ul className="navbar-nav NavBar d-flex">
           {authenticatedOperations}
           {props.isAuth ? LogoutTab : authenticateTabs}
         </ul>
