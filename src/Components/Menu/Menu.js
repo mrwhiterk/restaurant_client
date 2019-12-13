@@ -9,6 +9,7 @@ import { Axios } from '../../api/Axios'
 
 import { apiAuth, axiosConfig } from '../../api/api'
 import DeleteCartItemModal from '../UI/Modal/DeleteCartItemModal/DeleteCartItemModal'
+import CheckoutModal from '../UI/Modal/CheckoutModal/CheckoutModal'
 
 class Menu extends Component {
   state = {
@@ -63,7 +64,8 @@ class Menu extends Component {
     currentMenuItem: null,
     currentDeleteItem: null,
     showDeleteModal: false,
-    currentItemEditMode: null
+    currentItemEditMode: null,
+    showCheckoutModal: false
   }
 
   handleShow = () => {
@@ -76,6 +78,14 @@ class Menu extends Component {
 
   handleDeleteModalClose = () => {
     this.setState({ showDeleteModal: false, currentDeleteItem: null })
+  }
+
+  handleCheckoutModalClose = () => {
+    this.setState({ showCheckoutModal: false })
+  }
+
+  handleCheckoutSubmit = () => {
+    console.log('handle checkout submit')
   }
 
   handleSelectMenuItem = (name, price, isEditing) => {
@@ -103,7 +113,8 @@ class Menu extends Component {
           currentMenuItem: {
             name,
             price
-          }
+          },
+          currentItemEditMode: null
         },
         () => {
           this.handleShow()
@@ -126,28 +137,31 @@ class Menu extends Component {
     })
 
     if (existingItemIdx > -1) {
-      this.setState(prevState => {
-        let newCurrentOrder = [...this.state.currentOrder]
-        let currentItemObj = { ...this.state.currentOrder[existingItemIdx] }
+      this.setState(
+        prevState => {
+          let newCurrentOrder = [...this.state.currentOrder]
+          let currentItemObj = { ...this.state.currentOrder[existingItemIdx] }
 
-        if (editObj) {
-          currentItemObj.quantity = +data.quantity
-          currentItemObj.totalPrice = +data.totalPrice
-        } else {
-          currentItemObj.quantity += +data.quantity
-          currentItemObj.totalPrice += +data.totalPrice
-        }
+          if (editObj) {
+            currentItemObj.quantity = +data.quantity
+            currentItemObj.totalPrice = +data.totalPrice
+          } else {
+            currentItemObj.quantity += +data.quantity
+            currentItemObj.totalPrice += +data.totalPrice
+          }
 
-        newCurrentOrder[existingItemIdx] = currentItemObj
+          newCurrentOrder[existingItemIdx] = currentItemObj
 
-        return {
-          currentOrder: newCurrentOrder,
-          currentMenuItem: null
-        }
-      }, () => {
+          return {
+            currentOrder: newCurrentOrder,
+            currentMenuItem: null
+          }
+        },
+        () => {
           this.saveOrderInProgress()
           this.setState({ currentItemEditMode: null })
-      })
+        }
+      )
     } else {
       this.setState(
         prevState => ({
@@ -172,7 +186,7 @@ class Menu extends Component {
         axiosConfig
       )
 
-      console.log(result)
+      // console.log(result)
     } catch (e) {
       console.log(e)
     }
@@ -218,6 +232,10 @@ class Menu extends Component {
     })
   }
 
+  orderCheckout = () => {
+    this.setState({showCheckoutModal: true})
+  }
+
   render() {
     let menuList = []
     for (const key in this.state.menu) {
@@ -249,6 +267,7 @@ class Menu extends Component {
 
     return (
       <div className="Menu">
+        
         {this.state.currentMenuItem && !this.state.currentItemEditMode ? (
           <Modal
             handleClose={this.handleClose}
@@ -259,6 +278,7 @@ class Menu extends Component {
           />
         ) : null}
 
+       
         {this.state.currentMenuItem && this.state.currentItemEditMode ? (
           <Modal
             handleClose={this.handleClose}
@@ -269,6 +289,17 @@ class Menu extends Component {
             currentItemEditMode={this.state.currentItemEditMode}
           />
         ) : null}
+
+        {this.state.showCheckoutModal && (
+          <CheckoutModal
+            show={this.state.showCheckoutModal}
+            handleClose={this.handleCheckoutModalClose}
+            handleSubmit={this.handleCheckoutSubmit}
+            currentOrder={this.state.currentOrder}
+            renderCartModal={this.renderCartModal}
+            handleSelectMenuItem={this.handleSelectMenuItem}
+          />
+        )}
 
         {this.state.showDeleteModal ? (
           <DeleteCartItemModal
@@ -289,7 +320,7 @@ class Menu extends Component {
               renderCartModal={this.renderCartModal}
               handleSelectMenuItem={this.handleSelectMenuItem}
             />
-            <Button variant="secondary" onClick={this.props.handleClose}>
+            <Button variant="secondary" onClick={this.orderCheckout}>
               Checkout
             </Button>
           </div>

@@ -14,7 +14,7 @@ class MenuModal extends Component {
   }
 
   render() {
-    console.log(this.props.currentItemEditMode)
+    // console.log(this.props.currentItemEditMode)
     let options = []
 
     for (let i = 1; i <= 10; i++) {
@@ -24,8 +24,8 @@ class MenuModal extends Component {
         </option>
       )
     }
-    console.log(this.props.itemPrice)
-    console.log(this.state.quantity)
+    // console.log(this.props.itemPrice)
+    // console.log(this.state.quantity)
 
     let totalPrice = this.props.itemPrice * this.state.quantity
 
@@ -38,6 +38,7 @@ class MenuModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <div className="row">
+            {this.props.currentItemEditMode ? <p>Edit mode enabled</p> : null}
             <div className="col-12">
               Do you want to add the following to your order:
             </div>
@@ -66,9 +67,7 @@ class MenuModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <div className="d-flex justify-content-between row w-100 align-items-center">
-            <div>
-              Total: $ {(this.props.itemPrice * this.state.quantity).toFixed(2)}
-            </div>
+            <div>Total: $ {totalPrice.toFixed(2)}</div>
             <div>
               <Button variant="secondary" onClick={this.props.handleClose}>
                 Close
@@ -83,7 +82,6 @@ class MenuModal extends Component {
                       totalPrice,
                       this.props.currentItemEditMode
                     )
-                    this.setState({ quantity: 1 })
                   }}
                 >
                   Add to Cart
