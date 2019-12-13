@@ -1,6 +1,7 @@
 import React from 'react'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
+import { GoSignOut } from 'react-icons/go'
 
 const navbar = props => {
   let authenticateTabs = (
@@ -44,7 +45,7 @@ const navbar = props => {
   let LogoutTab = (
     <li className="nav-item">
       <Link className="nav-link" to="#" onClick={props.logout}>
-        Logout
+        <GoSignOut />
       </Link>
     </li>
   )
@@ -66,7 +67,7 @@ const navbar = props => {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav NavBar">
+        <ul className="navbar-nav NavBar d-flex justify-content-between w-100">
           {authenticatedOperations}
           {props.isAuth ? LogoutTab : authenticateTabs}
         </ul>

@@ -5,40 +5,46 @@ import PropTypes from 'prop-types'
 class MenuModal extends Component {
   state = {
     quantity: this.props.currentItemEditMode
-      ? this.props.currentItemEditMode.quantity
+      ? +this.props.currentItemEditMode.quantity
       : 1
   }
 
   setQuantity = e => {
-    this.setState({ quantity: e.target.value })
+    this.setState({ quantity: +e.target.value })
+  }
+
+  componentDidMount() {
+    console.log('mount')
   }
 
   render() {
-    // console.log(this.props.currentItemEditMode)
     let options = []
 
-    for (let i = 1; i <= 10; i++) {
+    console.log(this.state)
+
+    for (let i = this.props.currentItemEditMode ? 1 : 2; i <= 10; i++) {
       options.push(
-        <option value={i} key={i}>
+        <option value={+i} key={i}>
           {i}
         </option>
       )
     }
-    // console.log(this.props.itemPrice)
-    // console.log(this.state.quantity)
 
     let totalPrice = this.props.itemPrice * this.state.quantity
 
-    // console.log(this.props.currentItemEditMode)
-
     return (
-      <Modal show={this.props.show} onHide={this.props.handleClose}>
+      <Modal
+        show={this.props.show}
+        onHide={() => {
+          this.props.handleClose()
+          this.setState({ quantity: 1 })
+        }}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Add to Cart</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            {this.props.currentItemEditMode ? <p>Edit mode enabled</p> : null}
             <div className="col-12">
               Do you want to add the following to your order:
             </div>
@@ -53,12 +59,12 @@ class MenuModal extends Component {
                   id="inputGroupSelect04"
                   onChange={this.setQuantity}
                 >
-                  <option>0</option>
                   <option selected>
                     {this.props.currentItemEditMode
-                      ? this.props.currentItemEditMode.quantity + '(current)'
+                      ? +this.props.currentItemEditMode.quantity
                       : 1}
                   </option>
+
                   {options}
                 </select>
               </div>
@@ -69,7 +75,13 @@ class MenuModal extends Component {
           <div className="d-flex justify-content-between row w-100 align-items-center">
             <div>Total: $ {totalPrice.toFixed(2)}</div>
             <div>
-              <Button variant="secondary" onClick={this.props.handleClose}>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  this.props.handleClose()
+                  this.setState({ quantity: 1 })
+                }}
+              >
                 Close
               </Button>
 
@@ -78,13 +90,17 @@ class MenuModal extends Component {
                   variant="success"
                   onClick={() => {
                     this.props.handleSubmit(
-                      +this.state.quantity,
+                      this.state.quantity,
                       totalPrice,
                       this.props.currentItemEditMode
                     )
+
+                    this.setState({ quantity: 1 })
                   }}
                 >
-                  Add to Cart
+                  {this.props.currentItemEditMode
+                    ? 'Update Cart'
+                    : 'Add to Cart'}
                 </Button>
               )}
             </div>

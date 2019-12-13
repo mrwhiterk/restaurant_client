@@ -17,7 +17,7 @@ const miniCart = props => {
 
   return (
     <div className="MiniCart">
-      <h4>Your Cart</h4>
+      
 
       <ul className="list-group">
         {cartItems.length ? (

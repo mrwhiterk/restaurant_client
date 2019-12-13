@@ -73,7 +73,7 @@ class Menu extends Component {
   }
 
   handleClose = () => {
-    this.setState({ show: false })
+    this.setState({ show: false, currentItemEditMode: null })
   }
 
   handleDeleteModalClose = () => {
@@ -185,8 +185,6 @@ class Menu extends Component {
         this.state.currentOrder,
         axiosConfig
       )
-
-      // console.log(result)
     } catch (e) {
       console.log(e)
     }
@@ -233,7 +231,7 @@ class Menu extends Component {
   }
 
   orderCheckout = () => {
-    this.setState({showCheckoutModal: true})
+    this.setState({ showCheckoutModal: true })
   }
 
   render() {
@@ -267,7 +265,6 @@ class Menu extends Component {
 
     return (
       <div className="Menu">
-        
         {this.state.currentMenuItem && !this.state.currentItemEditMode ? (
           <Modal
             handleClose={this.handleClose}
@@ -278,7 +275,6 @@ class Menu extends Component {
           />
         ) : null}
 
-       
         {this.state.currentMenuItem && this.state.currentItemEditMode ? (
           <Modal
             handleClose={this.handleClose}
@@ -315,14 +311,17 @@ class Menu extends Component {
           <div className="col-8">{menuList}</div>
 
           <div className="col-4 border-left d-flex flex-column justify-content-between">
-            <MiniCart
-              currentOrder={this.state.currentOrder}
-              renderCartModal={this.renderCartModal}
-              handleSelectMenuItem={this.handleSelectMenuItem}
-            />
-            <Button variant="secondary" onClick={this.orderCheckout}>
-              Checkout
-            </Button>
+            <div>
+              <h4>Your Cart</h4>
+              <MiniCart
+                currentOrder={this.state.currentOrder}
+                renderCartModal={this.renderCartModal}
+                handleSelectMenuItem={this.handleSelectMenuItem}
+              />
+            </div>
+            {this.state.currentOrder.length ? <Button variant="outline-primary" onClick={this.orderCheckout}>
+              Place Order
+            </Button> : null}
           </div>
         </div>
       </div>

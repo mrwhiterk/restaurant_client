@@ -8,10 +8,10 @@ class CheckoutModal extends Component {
       <div>
         <Modal show={this.props.show} onHide={this.props.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Place Order Confirmation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Are you ready to Checkout?
+            Are you ready to place your order?
             <MiniCart
               currentOrder={this.props.currentOrder}
               renderCartModal={this.props.renderCartModal}
@@ -23,7 +23,7 @@ class CheckoutModal extends Component {
               Close
             </Button>
             <Button variant="primary" onClick={this.props.handleSubmit}>
-              Checkout
+              Place Order
             </Button>
           </Modal.Footer>
         </Modal>
