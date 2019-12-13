@@ -13,16 +13,12 @@ class MenuModal extends Component {
     this.setState({ quantity: +e.target.value })
   }
 
-  componentDidMount() {
-    console.log('mount')
-  }
-
   render() {
     let options = []
 
     console.log(this.state)
 
-    for (let i = this.props.currentItemEditMode ? 1 : 2; i <= 10; i++) {
+    for (let i = 1; i <= 10; i++) {
       options.push(
         <option value={+i} key={i}>
           {i}
@@ -58,12 +54,13 @@ class MenuModal extends Component {
                   className="custom-select"
                   id="inputGroupSelect04"
                   onChange={this.setQuantity}
-                >
-                  <option selected>
-                    {this.props.currentItemEditMode
+                  defaultValue={
+                    this.props.currentItemEditMode
                       ? +this.props.currentItemEditMode.quantity
-                      : 1}
-                  </option>
+                      : 1
+                  }
+                >
+                  
 
                   {options}
                 </select>
