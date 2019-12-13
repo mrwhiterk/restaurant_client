@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap'
 
 import { Axios } from '../../api/Axios'
 
-import { apiAuth, axiosConfig, submitOrder } from '../../api/api'
+import { apiAuth, axiosConfig, submitOrder, removeUserCurrentOrder } from '../../api/api'
 import DeleteCartItemModal from '../UI/Modal/DeleteCartItemModal/DeleteCartItemModal'
 import CheckoutModal from '../UI/Modal/CheckoutModal/CheckoutModal'
 import { Route } from 'react-router-dom'
@@ -90,7 +90,14 @@ class Menu extends Component {
   handleCheckoutSubmit = async () => {
     this.setState({ showCheckoutModal: false })
 
-    let result = await submitOrder(this.state.currentOrder)
+    try {
+      let result = await submitOrder(this.state.currentOrder)
+      await removeUserCurrentOrder()
+
+    } catch (e) {
+      console.log(e)
+    }
+
 
     this.props.history.push('/orders')
   }

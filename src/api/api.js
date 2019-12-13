@@ -66,6 +66,17 @@ export const getUserOrders = async () => {
   }
 }
 
+export const removeUserCurrentOrder = async () => {
+  apiAuth()
+
+  try {
+    let result = await Axios.delete('/api/users/removeCurrentOrder')
+    console.log(result)
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
 export const axiosConfig = {
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
