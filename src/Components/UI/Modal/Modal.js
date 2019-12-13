@@ -4,7 +4,9 @@ import PropTypes from 'prop-types'
 
 class MenuModal extends Component {
   state = {
-    quantity: this.props.currentItemEditMode ? this.props.currentItemEditMode.quantity : 1
+    quantity: this.props.currentItemEditMode
+      ? this.props.currentItemEditMode.quantity
+      : 1
   }
 
   setQuantity = e => {
@@ -12,6 +14,7 @@ class MenuModal extends Component {
   }
 
   render() {
+    console.log(this.props.currentItemEditMode)
     let options = []
 
     for (let i = 1; i <= 10; i++) {
@@ -21,6 +24,8 @@ class MenuModal extends Component {
         </option>
       )
     }
+    console.log(this.props.itemPrice)
+    console.log(this.state.quantity)
 
     let totalPrice = this.props.itemPrice * this.state.quantity
 
@@ -28,7 +33,6 @@ class MenuModal extends Component {
 
     return (
       <Modal show={this.props.show} onHide={this.props.handleClose}>
-        
         <Modal.Header closeButton>
           <Modal.Title>Add to Cart</Modal.Title>
         </Modal.Header>
@@ -49,7 +53,11 @@ class MenuModal extends Component {
                   onChange={this.setQuantity}
                 >
                   <option>0</option>
-                  <option selected>{this.props.currentItemEditMode ? this.props.currentItemEditMode.quantity + '(current)' : 1}</option>
+                  <option selected>
+                    {this.props.currentItemEditMode
+                      ? this.props.currentItemEditMode.quantity + '(current)'
+                      : 1}
+                  </option>
                   {options}
                 </select>
               </div>
@@ -58,7 +66,9 @@ class MenuModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <div className="d-flex justify-content-between row w-100 align-items-center">
-            <div>Total: $ {totalPrice.toFixed(2)}</div>
+            <div>
+              Total: $ {(this.props.itemPrice * this.state.quantity).toFixed(2)}
+            </div>
             <div>
               <Button variant="secondary" onClick={this.props.handleClose}>
                 Close
@@ -67,9 +77,14 @@ class MenuModal extends Component {
               {this.state.quantity > 0 && (
                 <Button
                   variant="success"
-                  onClick={() =>
-                    this.props.handleSubmit(+this.state.quantity, totalPrice, this.props.currentItemEditMode)
-                  }
+                  onClick={() => {
+                    this.props.handleSubmit(
+                      +this.state.quantity,
+                      totalPrice,
+                      this.props.currentItemEditMode
+                    )
+                    this.setState({ quantity: 1 })
+                  }}
                 >
                   Add to Cart
                 </Button>

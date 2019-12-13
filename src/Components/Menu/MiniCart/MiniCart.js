@@ -15,11 +15,22 @@ const miniCart = props => {
     />
   ))
 
-
   return (
     <div className="MiniCart">
       <h4>Your Cart</h4>
-      <ul className="list-group">{cartItems}</ul>
+
+      <ul className="list-group">
+        {cartItems.length ? (
+          cartItems
+        ) : (
+            <div className="text-center">
+              <h6 className="border-top pt-2">- Cart Empty -</h6>
+
+            </div>
+          
+          
+        )}
+      </ul>
     </div>
   )
 }

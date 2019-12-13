@@ -22,21 +22,21 @@ const navbar = props => {
   if (props.isAuth) {
     authenticatedOperations = (
       <>
-        <li className="nav-item active">
+        {/* <li className="nav-item active">
           <a className="nav-link" href="/#">
             Home <span className="sr-only">(current)</span>
           </a>
-        </li>
+        </li> */}
         <li className="nav-item">
           <a className="nav-link" href="/#">
             Order
           </a>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <a className="nav-link" href="/#">
             Checkout
           </a>
-        </li>
+        </li> */}
       </>
     )
   }

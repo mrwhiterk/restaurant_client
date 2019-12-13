@@ -283,12 +283,15 @@ class Menu extends Component {
         <div className="row">
           <div className="col-8">{menuList}</div>
 
-          <div className="col-4 border-left">
+          <div className="col-4 border-left d-flex flex-column justify-content-between">
             <MiniCart
               currentOrder={this.state.currentOrder}
               renderCartModal={this.renderCartModal}
               handleSelectMenuItem={this.handleSelectMenuItem}
             />
+            <Button variant="secondary" onClick={this.props.handleClose}>
+              Checkout
+            </Button>
           </div>
         </div>
       </div>
