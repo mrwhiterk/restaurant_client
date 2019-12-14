@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 
-import { getUserOrders } from '../../api/api'
+import { getUserOrders, cancelOrder } from '../../api/api'
 import SummaryCart from '../Menu/MiniCart/SummaryCart/SummaryCart'
-
-import { Tab, Row, Col, ListGroup } from 'react-bootstrap'
+import { Tab, Row, Col, Button, ListGroup } from 'react-bootstrap'
 import './Orders.css'
 
 class Order extends Component {
@@ -12,7 +11,6 @@ class Order extends Component {
   }
 
   async componentDidMount() {
-    // get all user orders
     try {
       let result = await getUserOrders()
       this.setState({ orders: result.data })
@@ -28,15 +26,17 @@ class Order extends Component {
           <Col sm={4}>
             <ListGroup>
               {this.state.orders.map((item, i) => (
-                <ListGroup.Item key={item.id} action href={`#link${i}`}>
-                  Order:
+                <ListGroup.Item key={i} action href={`#link${i}`}>
+                  Order:{' '}
+                  <span>{item.completed
+                    ? 'done'
+                    : item.submitted
+                    ? 'In work'
+                    : 'cancelled'}</span>
                   <div>{new Date(item.createdAt).toDateString()}</div>
                   <div>{new Date(item.createdAt).toLocaleTimeString()}</div>
                 </ListGroup.Item>
               ))}
-              {/* <ListGroup.Item action href="#link2">
-                  Link 2
-                </ListGroup.Item> */}
             </ListGroup>
           </Col>
           <Col sm={8}>
@@ -50,33 +50,48 @@ class Order extends Component {
                   >
                     <div>
                       {item.completed ? (
-                        <div class="alert alert-success" role="alert">
-                          Ready for Pickup
+                        <div className="alert alert-success" role="alert">
+                          Done
+                        </div>
+                      ) : item.submitted ? (
+                        <div className="alert alert-warning" role="alert">
+                          In Work
                         </div>
                       ) : (
-                        <div class="alert alert-warning" role="alert">
-                          In Work
+                        <div className="alert alert-danger" role="alert">
+                          Cancelled
                         </div>
                       )}
                       <div>
                         <SummaryCart currentOrder={item.content} />
-                        <div className="list-group-item d-flex justify-content-end text-center pr-5 border-0">
-                          <div className="d-flex flex-column justify-content-center">
-                            <div>Count:</div>
-                            <div>Total:</div>
-                          </div>
-                          <div className="d-flex flex-column justify-content-center ml-2 text-left">
-                            <div>
-                              {item.content.reduce(
-                                (acc, el) => acc + el.quantity,
-                                0
-                              )}
+                        <div className="list-group-item d-flex justify-content-between align-items-center text-center pr-5 border-0">
+                          {item.submitted ? (
+                            <Button
+                              variant="danger"
+                              onClick={() => cancelOrder(item._id)}
+                            >
+                              Cancel Order
+                            </Button>
+                          ) : <div></div>}
+
+                          <div className="d-flex">
+                            <div className="d-flex flex-column justify-content-center">
+                              <div>Count:</div>
+                              <div>Total:</div>
                             </div>
-                            <div>
-                              $
-                              {item.content
-                                .reduce((acc, el) => acc + el.totalPrice, 0)
-                                .toFixed(2)}
+                            <div className="d-flex flex-column justify-content-center ml-2 text-left">
+                              <div>
+                                {item.content.reduce(
+                                  (acc, el) => acc + el.quantity,
+                                  0
+                                )}
+                              </div>
+                              <div>
+                                $
+                                {item.content
+                                  .reduce((acc, el) => acc + el.totalPrice, 0)
+                                  .toFixed(2)}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -85,24 +100,17 @@ class Order extends Component {
                   </Tab.Pane>
                 )
               })}
-              {/* <Tab.Pane eventKey="#link2">
-                  <div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Pariatur ipsam quos officiis, rem nemo repudiandae aut iste
-                    autem, ab dignissimos vero eos dicta delectus qui sed ut
-                    impedit doloribus animi?
-                  </div>
-                </Tab.Pane> */}
             </Tab.Content>
           </Col>
         </Row>
       </Tab.Container>
     )
-    return (
-      <div className="Orders">
-        {this.state.orders.length ? content : <h4 className="text-center">-- No orders yet --</h4>}
-      </div>
-    )
+
+    if (!this.state.orders.length) {
+      content = <h4 className="text-center">-- No orders yet --</h4>
+    }
+
+    return <div className="Orders">{content}</div>
   }
 }
 

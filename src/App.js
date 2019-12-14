@@ -111,12 +111,7 @@ class App extends Component {
   }
 
   render() {
-    // let hiddenPage = <h1>Not authenticated</h1>
-
-    // if (this.state.isAuthenticated) {
-    //   hiddenPage = <h1>You have authenticated</h1>
-    // }
-
+    // todo - fix width of alert button
     let errorFlash = (
       <div className="alert alert-danger" role="alert">
         {this.state.errMessage}
