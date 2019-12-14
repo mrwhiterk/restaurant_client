@@ -77,6 +77,20 @@ export const removeUserCurrentOrder = async () => {
   }
 }
 
+export const getMenu = async () => {
+  apiAuth()
+
+  try {
+    let result = await Axios.get(process.env.REACT_APP_MENU_URL + 'menu.json', axiosConfig)
+
+    console.log(result)
+
+    return result.data;
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
 export const cancelOrder = async function (id) {
   apiAuth()
 

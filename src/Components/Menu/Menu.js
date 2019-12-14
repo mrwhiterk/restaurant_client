@@ -3,65 +3,25 @@ import './Menu.css'
 
 import MiniCart from './MiniCart/MiniCart'
 import Modal from '../UI/Modal/Modal'
-import { Button } from 'react-bootstrap'
+import { Button, Spinner } from 'react-bootstrap'
 
 import { Axios } from '../../api/Axios'
 
-import { apiAuth, axiosConfig, submitOrder, removeUserCurrentOrder } from '../../api/api'
+import {
+  apiAuth,
+  axiosConfig,
+  submitOrder,
+  removeUserCurrentOrder,
+  getMenu
+} from '../../api/api'
 import DeleteCartItemModal from '../UI/Modal/DeleteCartItemModal/DeleteCartItemModal'
 import CheckoutModal from '../UI/Modal/CheckoutModal/CheckoutModal'
-import { Route } from 'react-router-dom'
 
 class Menu extends Component {
   state = {
     currentOrder: [],
     show: false,
-    menu: {
-      Pies: [
-        {
-          name: 'Ol Faithful',
-          price: 9.0
-        },
-        {
-          name: 'Meat Lover',
-          price: 10.0
-        },
-        {
-          name: 'Veggie Supreme',
-          price: 8.0
-        }
-      ],
-
-      Pasta: [
-        {
-          name: 'Spaghetti',
-          price: 7.5
-        },
-        {
-          name: 'Alfredo',
-          price: 10.0
-        },
-        {
-          name: 'Bologonese',
-          price: 9.5
-        }
-      ],
-
-      Drinks: [
-        {
-          name: 'Coke',
-          price: 2.5
-        },
-        {
-          name: 'Sprite',
-          price: 2.0
-        },
-        {
-          name: 'Lemonade',
-          price: 1.5
-        }
-      ]
-    },
+    menu: null,
     currentMenuItem: null,
     currentDeleteItem: null,
     showDeleteModal: false,
@@ -91,11 +51,9 @@ class Menu extends Component {
     try {
       let result = await submitOrder(this.state.currentOrder)
       await removeUserCurrentOrder()
-
     } catch (e) {
       console.log(e)
     }
-
 
     this.props.history.push('/orders')
   }
@@ -209,8 +167,9 @@ class Menu extends Component {
 
     try {
       let result = await Axios.get('/api/users/getOrder', axiosConfig)
+      let menu = await getMenu()
 
-      this.setState({ currentOrder: result.data })
+      this.setState({ currentOrder: result.data, menu })
     } catch (e) {
       console.log(e)
     }
@@ -321,7 +280,15 @@ class Menu extends Component {
         ) : null}
 
         <div className="row">
-          <div className="col-8">{menuList}</div>
+          {this.state.menu ? (
+            <div className="col-8">{menuList}</div>
+          ) : (
+            <div className="col-8 spinner">
+              <Spinner animation="grow" role="status" variant="danger">
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+            </div>
+          )}
 
           <div className="col-4 border-left d-flex flex-column justify-content-between">
             <div>
