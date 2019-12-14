@@ -77,12 +77,15 @@ export const removeUserCurrentOrder = async () => {
   }
 }
 
-export const cancelOrder = async id => {
+export const cancelOrder = async function (id) {
   apiAuth()
 
   try {
     let result = await Axios.put(`/api/orders/cancel/${id}`)
+
     console.log(result)
+    console.log(this)
+    this.setOrders()
   } catch (e) {
     console.log('error', e)
   }

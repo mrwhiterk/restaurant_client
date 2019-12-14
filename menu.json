@@ -1,0 +1,48 @@
+{
+  "menu": {
+    "Pies": [
+      {
+        "name": "Ol Faithful",
+        "price": 9.0
+      },
+      {
+        "name": "Meat Lover",
+        "price": 10.0
+      },
+      {
+        "name": "Veggie Supreme",
+        "price": 8.0
+      }
+    ],
+
+    "Pasta": [
+      {
+        "name": "Spaghetti",
+        "price": 7.5
+      },
+      {
+        "name": "Alfredo",
+        "price": 10.0
+      },
+      {
+        "name": "Bologonese",
+        "price": 9.5
+      }
+    ],
+
+    "Drinks": [
+      {
+        "name": "Coke",
+        "price": 2.5
+      },
+      {
+        "name": "Sprite",
+        "price": 2.0
+      },
+      {
+        "name": "Lemonade",
+        "price": 1.5
+      }
+    ]
+  }
+}

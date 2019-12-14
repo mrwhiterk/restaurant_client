@@ -10,13 +10,21 @@ class Order extends Component {
     orders: []
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.setOrders()
+  }
+
+  async setOrders() {
     try {
       let result = await getUserOrders()
       this.setState({ orders: result.data })
     } catch (e) {
       console.log(e)
     }
+  }
+
+  async componentDidUpdate() {
+    console.log('update')
   }
 
   render() {
@@ -68,7 +76,7 @@ class Order extends Component {
                           {item.submitted ? (
                             <Button
                               variant="danger"
-                              onClick={() => cancelOrder(item._id)}
+                              onClick={cancelOrder.bind(this, item._id)}
                             >
                               Cancel Order
                             </Button>

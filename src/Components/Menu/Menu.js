@@ -12,8 +12,6 @@ import DeleteCartItemModal from '../UI/Modal/DeleteCartItemModal/DeleteCartItemM
 import CheckoutModal from '../UI/Modal/CheckoutModal/CheckoutModal'
 import { Route } from 'react-router-dom'
 
-import Orders from '../Orders/Orders'
-
 class Menu extends Component {
   state = {
     currentOrder: [],
