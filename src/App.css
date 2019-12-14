@@ -5,6 +5,12 @@
   /* align-items: center; */
 }
 
+body {
+  background-image: url('/ddp-VV6ZHcOgjrg-unsplash.jpg');
+  background-size: 100vw 100vh;
+
+}
+
 /* .alert-danger {
   width: 80%;
   margin: 0 auto;

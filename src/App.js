@@ -43,7 +43,10 @@ class App extends Component {
     try {
       let result = await Axios.post('/api/users/signup', user, axiosConfig)
       let decoded = this.setAuthTokenLocalStorage(result)
+      console.log(this.props)
       return decoded
+      // return decoded
+
     } catch (e) {
       if (e.message.includes('450')) {
         setFlash.call(this, true, 'Email is used on an existing account')
@@ -145,7 +148,7 @@ class App extends Component {
               />
             )}
           />
-          {/* <Redirect from="/" to="/" /> */}
+          {/* <Redirect from="/signup" to="/" /> */}
         </Switch>
       </>
     )
@@ -162,12 +165,11 @@ class App extends Component {
             <Switch>
               <Route path="/orders" component={Orders} />
               <Route path="/" exact component={Menu} />
+              <Redirect from="/signup" to="/" />
             </Switch>
           </>
         ) : null}
-        <Switch>
-          {!this.state.isAuthenticated ? authForms : null}
-        </Switch>
+        <Switch>{!this.state.isAuthenticated ? authForms : null}</Switch>
 
         <div className="text-center">
           {/* <button onClick={this.deleteUser}>delete user</button> */}

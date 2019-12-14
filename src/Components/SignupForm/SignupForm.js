@@ -3,7 +3,10 @@ import './SignupForm.css'
 
 const signupForm = props => {
   return (
-    <form className="SignupForm" onSubmit={props.handleSubmit}>
+    <form
+      className="SignupForm"
+      onSubmit={props.handleSubmit}
+    >
       <h2>Signup</h2>
       <div className="form-group">
         <label htmlFor="exampleInputEmail1">Email address</label>
@@ -45,7 +48,7 @@ const signupForm = props => {
           required
         />
       </div>
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-success">
         Submit
       </button>
     </form>
