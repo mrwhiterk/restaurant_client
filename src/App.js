@@ -22,7 +22,8 @@ class App extends Component {
     password: '',
     passwordConfirm: '',
     errMessage: '',
-    showErr: false
+    showErr: false,
+    toLogin: false
   }
 
   handleSignupSubmit = async e => {
@@ -121,9 +122,12 @@ class App extends Component {
       </div>
     )
 
-    let authForms = (
-      <>
-        <Switch>
+    if (this.state.toLogin) {
+      this.setState({toLogin: false})
+      return <Redirect to='/' />
+    }
+
+    let router = <Switch>
           <Route
             path="/signup"
             render={() => (
@@ -148,10 +152,21 @@ class App extends Component {
               />
             )}
           />
-          {/* <Redirect from="/signup" to="/" /> */}
+
         </Switch>
-      </>
-    )
+    
+    
+    if (this.state.isAuthenticated) {
+      router = 
+            <Switch>
+              <Route path="/orders" component={Orders} />
+              <Route path="/" exact component={Menu} />
+              <Redirect from="/signup" to="/" />
+            </Switch>
+          
+    }
+
+   
 
     return (
       <div className="App">
@@ -159,22 +174,9 @@ class App extends Component {
           isAuth={this.state.isAuthenticated}
           logout={logoutUser.bind(this)}
         />
-        {this.state.showErr ? errorFlash : null}
-        {this.state.isAuthenticated ? (
-          <>
-            <Switch>
-              <Route path="/orders" component={Orders} />
-              <Route path="/" exact component={Menu} />
-              <Redirect from="/signup" to="/" />
-            </Switch>
-          </>
-        ) : null}
-        <Switch>{!this.state.isAuthenticated ? authForms : null}</Switch>
+        {this.state.showErr && errorFlash}
+        {router}
 
-        <div className="text-center">
-          {/* <button onClick={this.deleteUser}>delete user</button> */}
-          {/* {hiddenPage} */}
-        </div>
       </div>
     )
   }

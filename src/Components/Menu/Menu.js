@@ -206,23 +206,22 @@ class Menu extends Component {
   }
 
   render() {
-    let menuList = []
-    for (const key in this.state.menu) {
-      if (this.state.menu.hasOwnProperty(key)) {
-        const menuSectionTitle = key
+    let orderItems = ['Pies', 'Pasta', 'Drinks']
+    let menuDisplay = []
 
-        menuList.push(
-          <React.Fragment key={key}>
-            <h4>{menuSectionTitle}</h4>
+    if (this.state.menu) {
+      menuDisplay = orderItems.map((item, idx) => {
+        // console.log(this.state.menu[item])
+        return (
+          <React.Fragment key={idx}>
+            <h4>{item}</h4>
             <hr />
-            {this.state.menu[menuSectionTitle].map(item => {
+            {this.state.menu[item].map(item => {
               return (
                 <li
                   className="list-group-item border-0 MenuItem"
                   key={item.name}
-                  onClick={() =>
-                    this.handleSelectMenuItem(item.name, item.price)
-                  }
+                  onClick={() => this.handleSelectMenuItem(item.name, item.price)}
                 >
                   {item.name}
                   <span>$ {item.price.toFixed(2)}</span>
@@ -231,7 +230,8 @@ class Menu extends Component {
             })}
           </React.Fragment>
         )
-      }
+      })
+
     }
 
     return (
@@ -281,7 +281,7 @@ class Menu extends Component {
 
         <div className="row">
           {this.state.menu ? (
-            <div className="col-8">{menuList}</div>
+            <div className="col-8">{menuDisplay}</div>
           ) : (
             <div className="col-8 spinner">
               <Spinner animation="grow" role="status" variant="danger">

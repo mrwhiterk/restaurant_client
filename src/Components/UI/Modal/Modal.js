@@ -16,7 +16,6 @@ class MenuModal extends Component {
   render() {
     let options = []
 
-    console.log(this.state)
 
     for (let i = 1; i <= 10; i++) {
       options.push(

@@ -23,10 +23,6 @@ class Order extends Component {
     }
   }
 
-  async componentDidUpdate() {
-    console.log('update')
-  }
-
   render() {
     let content = (
       <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">

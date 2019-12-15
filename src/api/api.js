@@ -34,8 +34,10 @@ export const logoutUser = async function() {
 
   try {
     localStorage.removeItem('jwtToken')
-    this.setState({ isAuthenticated: false, errMessage: '', showErr: false })
-    await Axios.post('/api/users/logout', axiosConfig)
+    this.setState({ isAuthenticated: false, errMessage: '', showErr: false, toLogin: true }, async () => {
+      await Axios.post('/api/users/logout', axiosConfig)
+    })
+    this.props.history.push('/dog')
   } catch (e) {
     console.log('error ', e)
   }
@@ -58,7 +60,7 @@ export const getUserOrders = async () => {
   try {
     let result = await Axios.get('/api/orders', axiosConfig)
 
-    console.log(result)
+    // console.log(result)
 
     return result
   } catch (e) {
