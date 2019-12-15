@@ -7,17 +7,19 @@ import SignupForm from './Components/SignupForm/SignupForm'
 import Navbar from './Components/Navigation/Navbar/Navbar'
 import Menu from './Components/Menu/Menu'
 import Orders from './Components/Orders/Orders'
+import Dashboard from './Components/Dashboard/Dashboard'
 
 import { Axios } from './api/Axios'
 import jwt_decode from 'jwt-decode'
 import setAuthJWT from './api/setAuthJWT'
 
-import { apiAuth, axiosConfig, logoutUser } from './api/api'
+import { apiAuth, axiosConfig, logoutUser, getLoggedInUser } from './api/api'
 import { setFlash } from './helperMethods'
 
 class App extends Component {
   state = {
     isAuthenticated: false,
+    isAdmin: false,
     email: '',
     password: '',
     passwordConfirm: '',
@@ -47,7 +49,6 @@ class App extends Component {
       console.log(this.props)
       return decoded
       // return decoded
-
     } catch (e) {
       if (e.message.includes('450')) {
         setFlash.call(this, true, 'Email is used on an existing account')
@@ -56,7 +57,7 @@ class App extends Component {
   }
 
   setAuthTokenLocalStorage = result => {
-    const { token } = result.data
+    const { token, user } = result.data
 
     localStorage.setItem('jwtToken', token)
     const decoded = jwt_decode(token)
@@ -66,7 +67,8 @@ class App extends Component {
       isAuthenticated: true,
       email: '',
       password: '',
-      passwordConfirm: ''
+      passwordConfirm: '',
+      isAdmin: user.admin
     })
     setFlash.call(this, false, '')
 
@@ -83,6 +85,7 @@ class App extends Component {
 
     try {
       let result = await Axios.post('/api/users/login', user, axiosConfig)
+      console.log(result)
       let decoded = this.setAuthTokenLocalStorage(result)
       return decoded
     } catch (e) {
@@ -92,11 +95,15 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    let data = apiAuth()
+  async componentDidMount() {
+    let idObj = apiAuth()
 
-    if (data) {
-      this.setState({ isAuthenticated: true })
+    let user = await getLoggedInUser()
+
+    console.log(user)
+
+    if (idObj) {
+      this.setState({ isAuthenticated: true, isAdmin: user.admin })
     }
   }
 
@@ -123,60 +130,59 @@ class App extends Component {
     )
 
     if (this.state.toLogin) {
-      this.setState({toLogin: false})
-      return <Redirect to='/' />
+      this.setState({ toLogin: false })
+      return <Redirect to="/" />
     }
 
-    let router = <Switch>
-          <Route
-            path="/signup"
-            render={() => (
-              <SignupForm
-                email={this.state.email}
-                password={this.state.password}
-                passwordConfirm={this.state.passwordConfirm}
-                handleSubmit={this.handleSignupSubmit}
-                handleChange={this.handleChange}
-              />
-            )}
-          />
-          <Route
-            path="/"
-            exact
-            render={() => (
-              <LoginForm
-                email={this.state.email}
-                password={this.state.password}
-                handleSubmit={this.handleLoginSubmit}
-                handleChange={this.handleChange}
-              />
-            )}
-          />
+    let router = (
+      <Switch>
+        <Route
+          path="/signup"
+          render={() => (
+            <SignupForm
+              email={this.state.email}
+              password={this.state.password}
+              passwordConfirm={this.state.passwordConfirm}
+              handleSubmit={this.handleSignupSubmit}
+              handleChange={this.handleChange}
+            />
+          )}
+        />
+        <Route
+          path="/"
+          exact
+          render={() => (
+            <LoginForm
+              email={this.state.email}
+              password={this.state.password}
+              handleSubmit={this.handleLoginSubmit}
+              handleChange={this.handleChange}
+            />
+          )}
+        />
+      </Switch>
+    )
 
-        </Switch>
-    
-    
     if (this.state.isAuthenticated) {
-      router = 
-            <Switch>
-              <Route path="/orders" component={Orders} />
-              <Route path="/" exact component={Menu} />
-              <Redirect from="/signup" to="/" />
-            </Switch>
-          
+      router = (
+        <Switch>
+          <Route path="/orders" component={Orders} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/" exact component={Menu} />
+          <Redirect from="/signup" to="/" />
+        </Switch>
+      )
     }
-
-   
 
     return (
       <div className="App">
         <Navbar
           isAuth={this.state.isAuthenticated}
+          isAdmin={this.state.isAdmin}
           logout={logoutUser.bind(this)}
         />
         {this.state.showErr && errorFlash}
         {router}
-
       </div>
     )
   }

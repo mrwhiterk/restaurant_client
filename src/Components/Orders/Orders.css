@@ -2,3 +2,7 @@
   width: 80%;
   margin: 16px auto 0 auto;
 }
+
+.Orders h4, .Orders h6 {
+  color: rgb(174, 0, 0);
+}

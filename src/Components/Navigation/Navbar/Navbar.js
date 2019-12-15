@@ -38,6 +38,13 @@ const navbar = props => {
             History
           </a>
         </li>
+        {props.isAdmin && (
+          <li className="nav-item">
+            <a className="nav-link" href="/dashboard">
+              Dashboard
+            </a>
+          </li>
+        )}
       </>
     )
   }

@@ -29,15 +29,35 @@ export const apiAuth = () => {
   }
 }
 
+export const getLoggedInUser = async () => {
+  apiAuth()
+  try {
+    let result = await Axios.get('/api/users/me', axiosConfig)
+    return result.data;
+
+  } catch (e) {
+    console.log('error', e)
+  }
+
+}
+
 export const logoutUser = async function() {
   apiAuth()
 
   try {
     localStorage.removeItem('jwtToken')
-    this.setState({ isAuthenticated: false, errMessage: '', showErr: false, toLogin: true }, async () => {
-      await Axios.post('/api/users/logout', axiosConfig)
-    })
-    this.props.history.push('/dog')
+    this.setState(
+      {
+        isAuthenticated: false,
+        isAdmin: false,
+        errMessage: '',
+        showErr: false,
+        toLogin: true
+      },
+      async () => {
+        await Axios.post('/api/users/logout', axiosConfig)
+      }
+    )
   } catch (e) {
     console.log('error ', e)
   }
@@ -68,6 +88,22 @@ export const getUserOrders = async () => {
   }
 }
 
+export const getAllOrders = async () => {
+  apiAuth()
+
+  try {
+    let result = await Axios.get('/api/orders/all', axiosConfig)
+
+    // console.log(result)
+
+    return result
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
+
+
 export const removeUserCurrentOrder = async () => {
   apiAuth()
 
@@ -83,17 +119,20 @@ export const getMenu = async () => {
   apiAuth()
 
   try {
-    let result = await Axios.get(process.env.REACT_APP_MENU_URL + 'menu.json', axiosConfig)
+    let result = await Axios.get(
+      process.env.REACT_APP_MENU_URL + 'menu.json',
+      axiosConfig
+    )
 
     console.log(result)
 
-    return result.data;
+    return result.data
   } catch (e) {
     console.log('error', e)
   }
 }
 
-export const cancelOrder = async function (id) {
+export const cancelOrder = async function(id) {
   apiAuth()
 
   try {

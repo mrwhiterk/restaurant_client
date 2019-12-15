@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 
-import { getUserOrders, cancelOrder } from '../../api/api'
+import { getAllOrders, cancelOrder } from '../../api/api'
+
 import SummaryCart from '../Menu/MiniCart/SummaryCart/SummaryCart'
+
 import { Tab, Row, Col, Button, ListGroup } from 'react-bootstrap'
-import './Orders.css'
+
 
 class Order extends Component {
   state = {
@@ -16,7 +18,7 @@ class Order extends Component {
 
   async setOrders() {
     try {
-      let result = await getUserOrders()
+      let result = await getAllOrders()
       this.setState({ orders: result.data })
     } catch (e) {
       console.log(e)
@@ -31,11 +33,16 @@ class Order extends Component {
             <ListGroup>
               {this.state.orders.map((item, i) => (
                 <ListGroup.Item key={i} action href={`#link${i}`}>
-                  <span>{item.completed
-                    ? 'done'
-                    : item.submitted
-                    ? 'In work'
-                    : 'cancelled'}</span>
+
+                  <div>{item.userId.email}</div>
+                  
+                  <span>
+                    {item.completed
+                      ? 'done'
+                      : item.submitted
+                      ? 'In work'
+                      : 'cancelled'}
+                  </span>
                   <div>{new Date(item.createdAt).toDateString()}</div>
                   <div>{new Date(item.createdAt).toLocaleTimeString()}</div>
                 </ListGroup.Item>
@@ -52,6 +59,7 @@ class Order extends Component {
                     className="border rounded p-2"
                   >
                     <div>
+
                       {item.completed ? (
                         <div className="alert alert-success" role="alert">
                           Done
@@ -75,7 +83,9 @@ class Order extends Component {
                             >
                               Cancel Order
                             </Button>
-                          ) : <div></div>}
+                          ) : (
+                            <div></div>
+                          )}
 
                           <div className="d-flex">
                             <div className="d-flex flex-column justify-content-center">
