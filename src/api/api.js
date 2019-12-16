@@ -134,7 +134,7 @@ export const cancelOrder = async function(id) {
   apiAuth()
 
   try {
-    let result = await Axios.put(`/api/orders/cancel/${id}`)
+    await Axios.put(`/api/orders/cancel/${id}`)
 
     this.setOrders()
   } catch (e) {
@@ -146,7 +146,7 @@ export const resumeOrder = async function (id) {
   apiAuth()
 
   try {
-    let result = await Axios.put(`/api/orders/resume/${id}`)
+    await Axios.put(`/api/orders/resume/${id}`)
 
     this.setOrders()
   } catch (e) {
@@ -158,7 +158,7 @@ export const completeOrder = async function (id) {
   apiAuth()
 
   try {
-    let result = await Axios.put(`/api/orders/complete/${id}`)
+    await Axios.put(`/api/orders/complete/${id}`)
 
     this.setOrders()
   } catch (e) {
@@ -169,7 +169,7 @@ export const markOrderIncomplete = async function (id) {
   apiAuth()
 
   try {
-    let result = await Axios.put(`/api/orders/incomplete/${id}`)
+    await Axios.put(`/api/orders/incomplete/${id}`)
 
     this.setOrders()
   } catch (e) {

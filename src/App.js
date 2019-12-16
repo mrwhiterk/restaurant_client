@@ -98,9 +98,9 @@ class App extends Component {
   async componentDidMount() {
     let idObj = apiAuth()
 
-    let user = await getLoggedInUser()
-
+    
     if (idObj) {
+      let user = await getLoggedInUser()
       this.setState({ isAuthenticated: true, isAdmin: user.admin })
     }
   }
