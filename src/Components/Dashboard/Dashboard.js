@@ -5,8 +5,12 @@ import {
   cancelOrder,
   resumeOrder,
   completeOrder,
-  markOrderIncomplete
+  markOrderIncomplete,
+  archive,
+  activate
 } from '../../api/api'
+
+import './Dashboard.css'
 
 import SummaryCart from '../Menu/MiniCart/SummaryCart/SummaryCart'
 
@@ -16,34 +20,62 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 
 class Order extends Component {
   state = {
-    orders: []
+    orders: [],
+    ordersDisplayed: []
   }
 
   componentDidMount() {
     this.setOrders()
   }
 
-  async setOrders() {
+  setOrders = async () => {
     try {
       let result = await getAllOrders()
-      this.setState({ orders: result.data })
+      this.setState({
+        orders: result.data,
+        ordersDisplayed: result.data.filter(x => x.isActive)
+      })
     } catch (e) {
       console.log(e)
     }
   }
 
+  setAllOrders = () => {
+    this.setState(prevState => ({
+      ordersDisplayed: prevState.orders
+    }))
+  }
+
+  setActiveOrders = () => {
+    this.setOrders()
+    this.setState(prevState => ({
+      ordersDisplayed: prevState.orders.filter(x => x.isActive)
+    }))
+  }
+
+  setArchivedOrders = async () => {
+    this.setState(prevState => ({
+      ordersDisplayed: prevState.orders.filter(x => !x.isActive)
+    }))
+  }
+
   render() {
+    let activeOrders = this.state.orders.filter(x => x.isActive).length
+    let archivedOrders = this.state.orders.filter(x => !x.isActive).length
+
     let content = (
       <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
         <Row>
           <Col sm={4}>
             <ListGroup>
-              {this.state.orders.map((item, i) => (
+              {this.state.ordersDisplayed.map((item, i) => (
                 <ListGroup.Item key={i} action href={`#link${i}`}>
                   <div>{item.userId.email}</div>
 
                   <span>
-                    {item.completed
+                    {!item.isActive
+                      ? 'Archived'
+                      : item.completed
                       ? 'Pickup'
                       : item.submitted
                       ? 'In work'
@@ -57,7 +89,7 @@ class Order extends Component {
           </Col>
           <Col sm={8}>
             <Tab.Content>
-              {this.state.orders.map((item, i) => {
+              {this.state.ordersDisplayed.map((item, i) => {
                 return (
                   <Tab.Pane
                     eventKey={`#link${i}`}
@@ -65,20 +97,25 @@ class Order extends Component {
                     className="border rounded p-2"
                   >
                     <div>
-                      {item.completed ? (
-                        <div className="alert alert-success" role="alert">
-                          Ready for Pickup
-                        </div>
-                      ) : item.submitted ? (
-                        <div className="alert alert-warning" role="alert">
-                          In Work
-                        </div>
+                      {item.isActive ? (
+                        item.completed ? (
+                          <div className="alert alert-success" role="alert">
+                            Ready for Pickup
+                          </div>
+                        ) : item.submitted ? (
+                          <div className="alert alert-warning" role="alert">
+                            In Work
+                          </div>
+                        ) : (
+                          <div className="alert alert-danger" role="alert">
+                            Cancelled
+                          </div>
+                        )
                       ) : (
-                        <div className="alert alert-danger" role="alert">
-                          Cancelled
+                        <div className="alert alert-dark" role="alert">
+                          Archived
                         </div>
                       )}
-
 
                       <div>
                         <SummaryCart currentOrder={item.content} />
@@ -118,9 +155,25 @@ class Order extends Component {
                                 )
                               ) : (
                                 <Dropdown.Item
-                                  onClick={markOrderIncomplete.bind(this, item._id)}
+                                  onClick={markOrderIncomplete.bind(
+                                    this,
+                                    item._id
+                                  )}
                                 >
                                   Mark Incomplete
+                                </Dropdown.Item>
+                              )}
+                              {item.isActive ? (
+                                <Dropdown.Item
+                                  onClick={archive.bind(this, item._id)}
+                                >
+                                  Archive
+                                </Dropdown.Item>
+                              ) : (
+                                <Dropdown.Item
+                                  onClick={activate.bind(this, item._id)}
+                                >
+                                  Set Active
                                 </Dropdown.Item>
                               )}
                             </Dropdown.Menu>
@@ -162,7 +215,46 @@ class Order extends Component {
       content = <h4 className="text-center">-- No orders yet --</h4>
     }
 
-    return <div className="Orders">{content}</div>
+    return (
+      <div className="Orders">
+        <div className="text-center">
+          <Dropdown className="mb-2">
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              Filter
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={this.setAllOrders}
+                className="d-flex justify-content-between"
+              >
+                <>
+                  <div>All</div> <div>{this.state.orders.length}</div>
+                </>
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={this.setActiveOrders}
+                className="d-flex justify-content-between"
+              >
+                <>
+                  <div>Active</div> <div>{activeOrders}</div>
+                </>
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={this.setArchivedOrders}
+                className="d-flex justify-content-between"
+              >
+                <>
+                  <div>Archived</div> <div>{archivedOrders}</div>
+                </>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+
+        {content}
+      </div>
+    )
   }
 }
 

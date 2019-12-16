@@ -1,7 +1,8 @@
-
 .NavBar {
   display: flex;
 }
-
+.navbar {
+  opacity: 0.7 !important;
+}
 
 

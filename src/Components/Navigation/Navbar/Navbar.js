@@ -58,7 +58,7 @@ const navbar = props => {
   )
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark half-opacity Navbar">
       <a className="navbar-brand" href="/#">
         Joey's Pizza
       </a>

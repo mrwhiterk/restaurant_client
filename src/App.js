@@ -101,7 +101,10 @@ class App extends Component {
     
     if (idObj) {
       let user = await getLoggedInUser()
-      this.setState({ isAuthenticated: true, isAdmin: user.admin })
+      if (user) {
+        this.setState({ isAuthenticated: true, isAdmin: user.admin })
+
+      }
     }
   }
 

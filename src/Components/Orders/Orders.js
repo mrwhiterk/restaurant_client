@@ -29,7 +29,7 @@ class Order extends Component {
         <Row>
           <Col sm={4}>
             <ListGroup>
-              {this.state.orders.map((item, i) => (
+              {this.state.orders.filter(x => x.isActive).map((item, i) => (
                 <ListGroup.Item key={i} action href={`#link${i}`}>
                   <span>{item.completed
                     ? 'done'
@@ -44,7 +44,7 @@ class Order extends Component {
           </Col>
           <Col sm={8}>
             <Tab.Content>
-              {this.state.orders.map((item, i) => {
+              {this.state.orders.filter(x => x.isActive).map((item, i) => {
                 return (
                   <Tab.Pane
                     eventKey={`#link${i}`}

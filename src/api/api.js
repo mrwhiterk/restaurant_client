@@ -92,7 +92,20 @@ export const getAllOrders = async () => {
   apiAuth()
 
   try {
-    let result = await Axios.get('/api/orders/all', axiosConfig)
+    let result = await Axios.get(`/api/orders/all/`, axiosConfig)
+
+    // console.log(result)
+
+    return result
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+export const getSelectOrders = async (isActive) => {
+  apiAuth()
+
+  try {
+    let result = await Axios.get(`/api/orders/all/${isActive}`, axiosConfig)
 
     // console.log(result)
 
@@ -176,6 +189,62 @@ export const markOrderIncomplete = async function (id) {
     console.log('error', e)
   }
 }
+export const archive = async function (id) {
+  apiAuth()
+
+  try {
+    await Axios.put(`/api/orders/archive/${id}`)
+
+    this.setActiveOrders()
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+export const activate = async function (id) {
+  apiAuth()
+
+  try {
+    await Axios.put(`/api/orders/activate/${id}`)
+
+    this.setActiveOrders()
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
+export const getOrdersCount = async function () {
+  apiAuth()
+
+  try {
+    return await Axios.put(`/api/orders/getOrdersCount`)
+
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
+export const getActiveOrdersCount = async function () {
+  apiAuth()
+
+  try {
+    return await Axios.put(`/api/orders/getActiveOrdersCount`)
+
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
+export const getArchivedOrdersCount = async function () {
+  apiAuth()
+
+  try {
+    return await Axios.put(`/api/orders/getArchivedOrdersCount`)
+
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
 export const axiosConfig = {
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
