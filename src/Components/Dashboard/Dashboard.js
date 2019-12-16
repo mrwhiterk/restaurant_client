@@ -1,11 +1,18 @@
 import React, { Component } from 'react'
 
-import { getAllOrders, cancelOrder } from '../../api/api'
+import {
+  getAllOrders,
+  cancelOrder,
+  resumeOrder,
+  completeOrder,
+  markOrderIncomplete
+} from '../../api/api'
 
 import SummaryCart from '../Menu/MiniCart/SummaryCart/SummaryCart'
 
-import { Tab, Row, Col, Button, ListGroup } from 'react-bootstrap'
+import { Tab, Row, Col, Button, ListGroup, Dropdown } from 'react-bootstrap'
 
+import { GiHamburgerMenu } from 'react-icons/gi'
 
 class Order extends Component {
   state = {
@@ -33,9 +40,8 @@ class Order extends Component {
             <ListGroup>
               {this.state.orders.map((item, i) => (
                 <ListGroup.Item key={i} action href={`#link${i}`}>
-
                   <div>{item.userId.email}</div>
-                  
+
                   <span>
                     {item.completed
                       ? 'done'
@@ -59,7 +65,6 @@ class Order extends Component {
                     className="border rounded p-2"
                   >
                     <div>
-
                       {item.completed ? (
                         <div className="alert alert-success" role="alert">
                           Done
@@ -73,19 +78,53 @@ class Order extends Component {
                           Cancelled
                         </div>
                       )}
+                      {item.completed ? 'hello' : 'bye'}
+                      {console.log(item.completed)}
                       <div>
                         <SummaryCart currentOrder={item.content} />
                         <div className="list-group-item d-flex justify-content-between align-items-center text-center pr-5 border-0">
-                          {item.submitted ? (
-                            <Button
-                              variant="danger"
-                              onClick={cancelOrder.bind(this, item._id)}
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="default"
+                              id="dropdown-basic"
                             >
-                              Cancel Order
-                            </Button>
-                          ) : (
-                            <div></div>
-                          )}
+                              <GiHamburgerMenu />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              {!item.completed ? (
+                                item.submitted ? (
+                                  <>
+                                    <Dropdown.Item
+                                      onClick={cancelOrder.bind(this, item._id)}
+                                    >
+                                      Cancel
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={completeOrder.bind(
+                                        this,
+                                        item._id
+                                      )}
+                                    >
+                                      Complete
+                                    </Dropdown.Item>
+                                  </>
+                                ) : (
+                                  <Dropdown.Item
+                                    onClick={resumeOrder.bind(this, item._id)}
+                                  >
+                                    Resume
+                                  </Dropdown.Item>
+                                )
+                              ) : (
+                                <Dropdown.Item
+                                  onClick={markOrderIncomplete.bind(this, item._id)}
+                                >
+                                  Mark Incomplete
+                                </Dropdown.Item>
+                              )}
+                            </Dropdown.Menu>
+                          </Dropdown>
 
                           <div className="d-flex">
                             <div className="d-flex flex-column justify-content-center">

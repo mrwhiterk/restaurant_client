@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { getUserOrders, cancelOrder } from '../../api/api'
+import { getUserOrders, cancelOrder, resumeOrder } from '../../api/api'
 import SummaryCart from '../Menu/MiniCart/SummaryCart/SummaryCart'
 import { Tab, Row, Col, Button, ListGroup } from 'react-bootstrap'
 import './Orders.css'
