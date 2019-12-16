@@ -44,7 +44,7 @@ class Order extends Component {
 
                   <span>
                     {item.completed
-                      ? 'done'
+                      ? 'Pickup'
                       : item.submitted
                       ? 'In work'
                       : 'cancelled'}
@@ -67,7 +67,7 @@ class Order extends Component {
                     <div>
                       {item.completed ? (
                         <div className="alert alert-success" role="alert">
-                          Done
+                          Ready for Pickup
                         </div>
                       ) : item.submitted ? (
                         <div className="alert alert-warning" role="alert">
@@ -78,8 +78,8 @@ class Order extends Component {
                           Cancelled
                         </div>
                       )}
-                      {item.completed ? 'hello' : 'bye'}
-                      {console.log(item.completed)}
+
+
                       <div>
                         <SummaryCart currentOrder={item.content} />
                         <div className="list-group-item d-flex justify-content-between align-items-center text-center pr-5 border-0">
