@@ -17,6 +17,8 @@ import setAuthJWT from './api/setAuthJWT'
 import { apiAuth, axiosConfig, logoutUser, getLoggedInUser } from './api/api'
 import { setFlash } from './helperMethods'
 
+// todo - auth handler
+
 class App extends Component {
   state = {
     isAuthenticated: false,
@@ -124,7 +126,6 @@ class App extends Component {
   }
 
   render() {
-    // todo - fix width of alert button
     let errorFlash = (
       <div className="alert alert-danger" role="alert">
         {this.state.errMessage}

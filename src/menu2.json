@@ -2,11 +2,11 @@
   "menu": {
     "Drinks": [
       {
-        "name": "Coke",
+        "name": "changed Coke",
         "price": 2.5
       },
       {
-        "name": "Sprite",
+        "name": "changed Sprite",
         "price": 2.0
       },
       {
@@ -34,7 +34,7 @@
     ],
     "Pies": [
       {
-        "name": "Ol Faithful",
+        "name": "changed Ol Faithful",
         "price": 9.0
       },
       {

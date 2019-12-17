@@ -17,6 +17,8 @@ import {
 import DeleteCartItemModal from '../UI/Modal/DeleteCartItemModal/DeleteCartItemModal'
 import CheckoutModal from '../UI/Modal/CheckoutModal/CheckoutModal'
 
+// todo - menu
+
 class Menu extends Component {
   state = {
     currentOrder: [],
