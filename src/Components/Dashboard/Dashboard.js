@@ -63,8 +63,8 @@ class Order extends Component {
     let activeOrders = this.state.orders.filter(x => x.isActive).length
     let archivedOrders = this.state.orders.filter(x => !x.isActive).length
 
-    let cancelOrderBtn = item => {
-      return (
+    let cancelCompleteBtns = item => {
+      return item.isActive ? (
         <>
           <Dropdown.Item onClick={cancelOrder.bind(this, item._id)}>
             Cancel
@@ -73,7 +73,7 @@ class Order extends Component {
             Complete
           </Dropdown.Item>
         </>
-      )
+      ) : null
     }
 
     let resumeBtn = item => {
@@ -81,7 +81,7 @@ class Order extends Component {
         <Dropdown.Item onClick={resumeOrder.bind(this, item._id)}>
           Resume
         </Dropdown.Item>
-      ) : null;
+      ) : null
     }
 
     let content = (
@@ -152,7 +152,7 @@ class Order extends Component {
                             <Dropdown.Menu>
                               {!item.completed ? (
                                 item.submitted ? (
-                                  cancelOrderBtn(item)
+                                  cancelCompleteBtns(item)
                                 ) : (
                                   resumeBtn(item)
                                 )
