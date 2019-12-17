@@ -143,6 +143,23 @@ export const getMenu = async () => {
   }
 }
 
+export const addMenuItem = async (data) => {
+  apiAuth()
+  console.log('hit')
+
+  try {
+    let result = await Axios.post(
+      process.env.REACT_APP_MENU_URL + 'test.json', [{ name: 'ryan', price: 1 }] ,
+    )
+
+    console.log(result)
+
+    return result.data
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+
 export const cancelOrder = async function(id) {
   apiAuth()
 

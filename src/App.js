@@ -8,6 +8,7 @@ import Navbar from './Components/Navigation/Navbar/Navbar'
 import Menu from './Components/Menu/Menu'
 import Orders from './Components/Orders/Orders'
 import Dashboard from './Components/Dashboard/Dashboard'
+import EditMenu from './Components/EditMenu/EditMenu'
 
 import { Axios } from './api/Axios'
 import jwt_decode from 'jwt-decode'
@@ -169,6 +170,7 @@ class App extends Component {
         <Switch>
           <Route path="/orders" component={Orders} />
           <Route path="/dashboard" component={Dashboard} />
+          {/* <Route path="/editMenu" component={EditMenu} /> */}
           <Route path="/" exact component={Menu} />
           <Redirect from="/signup" to="/" />
         </Switch>

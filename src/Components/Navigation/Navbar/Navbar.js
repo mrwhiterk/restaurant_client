@@ -39,11 +39,18 @@ const navbar = props => {
           </a>
         </li>
         {props.isAdmin && (
-          <li className="nav-item">
-            <a className="nav-link" href="/dashboard">
-              Dashboard
-            </a>
-          </li>
+          <>
+            <li className="nav-item">
+              <a className="nav-link" href="/dashboard">
+                Dashboard
+              </a>
+            </li>
+            {/* <li className="nav-item">
+              <a className="nav-link" href="/editMenu">
+                Edit Menu
+              </a>
+            </li> */}
+          </>
         )}
       </>
     )

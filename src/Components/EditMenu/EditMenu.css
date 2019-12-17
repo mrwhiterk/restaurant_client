@@ -1,0 +1,16 @@
+.EditMenu {
+}
+
+.EditMenu h4, .EditMenu h6, .EditMenu h2 {
+  color: rgb(174, 0, 0);
+}
+
+.EditMenu #add {
+  color:rgb(174, 0, 0);
+  font-size: 2em;
+  cursor: pointer;
+}
+
+.EditMenu #add:hover {
+  color:white;
+}
