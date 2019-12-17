@@ -2,6 +2,7 @@ import React from 'react'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
 import { GoSignOut } from 'react-icons/go'
+import { FaPizzaSlice } from 'react-icons/fa'
 
 const navbar = props => {
   let authenticateTabs = (
@@ -67,7 +68,7 @@ const navbar = props => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark half-opacity Navbar">
       <a className="navbar-brand" href="/#">
-        Joey's Pizza
+        Joey's <FaPizzaSlice /> Pizza
       </a>
       <button
         className="navbar-toggler"
