@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { getUserOrders, cancelOrder, resumeOrder } from '../../api/api'
+import { getUserOrders, cancelOrder } from '../../api/api'
 import SummaryCart from '../Menu/MiniCart/SummaryCart/SummaryCart'
 import { Tab, Row, Col, Button, ListGroup } from 'react-bootstrap'
 import './Orders.css'
@@ -24,18 +24,21 @@ class Order extends Component {
   }
 
   render() {
+    console.log(this.state.orders)
     let content = (
       <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
         <Row>
           <Col sm={4}>
             <ListGroup>
-              {this.state.orders.filter(x => x.isActive).map((item, i) => (
+              {this.state.orders.map((item, i) => (
                 <ListGroup.Item key={i} action href={`#link${i}`}>
-                  <span>{item.completed
-                    ? 'done'
-                    : item.submitted
-                    ? 'In work'
-                    : 'cancelled'}</span>
+                  <span>
+                    {!item.isActive ? 'closed' : item.completed
+                      ? 'done'
+                      : item.submitted
+                      ? 'In work'
+                      : 'cancelled'}
+                  </span>
                   <div>{new Date(item.createdAt).toDateString()}</div>
                   <div>{new Date(item.createdAt).toLocaleTimeString()}</div>
                 </ListGroup.Item>
@@ -44,7 +47,7 @@ class Order extends Component {
           </Col>
           <Col sm={8}>
             <Tab.Content>
-              {this.state.orders.filter(x => x.isActive).map((item, i) => {
+              {this.state.orders.map((item, i) => {
                 return (
                   <Tab.Pane
                     eventKey={`#link${i}`}
@@ -52,7 +55,11 @@ class Order extends Component {
                     className="border rounded p-2"
                   >
                     <div>
-                      {item.completed ? (
+                      {!item.isActive ? (
+                        <div className="alert alert-dark" role="alert">
+                          Closed
+                        </div>
+                      ) : item.completed ? (
                         <div className="alert alert-success" role="alert">
                           Done
                         </div>
@@ -75,7 +82,9 @@ class Order extends Component {
                             >
                               Cancel Order
                             </Button>
-                          ) : <div></div>}
+                          ) : (
+                            <div></div>
+                          )}
 
                           <div className="d-flex">
                             <div className="d-flex flex-column justify-content-center">
