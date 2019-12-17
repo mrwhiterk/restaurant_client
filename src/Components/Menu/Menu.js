@@ -281,7 +281,7 @@ class Menu extends Component {
 
         <div className="row">
           {this.state.menu ? (
-            <div className="col-8">{menuDisplay}</div>
+            <div className="col-8 MenuList">{menuDisplay}</div>
           ) : (
             <div className="col-8 spinner">
               <Spinner animation="grow" role="status" variant="danger">

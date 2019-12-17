@@ -27,3 +27,8 @@
   padding: 30px;
   padding-top: 200px;
 }
+
+.MenuList {
+  overflow-y: scroll;
+  height: 85vh;
+}
