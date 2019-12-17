@@ -1,68 +1,75 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Restaurant Order App
 
-## Available Scripts
+I created a simple fluid interface where any food vendor can load there menu and manage orders. This App is designed to be adaptable, intuitive, and scalable to fit food vendors of small to medium size.
 
-In the project directory, you can run:
+## Getting Started
 
-### `npm start`
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Prerequisites
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+What things you need to install the software and how to install them
 
-### `npm test`
+```
+Install Node & NPM
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installing
 
-### `npm run build`
+A step by step guide to getting the app up and running.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+Download the backend and run NPM install. 
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```
+Setup up your .env file with a MONGO_URI, and SESSION_SECRET
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+run "npm run start" making sure first your env variables are setup correctly.
+```
 
-### `npm run eject`
+```
+Download the front-end and run npm install.
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+run "npm start" in the console.
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Deployment
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+The API is deployed on Heroku. - https://ryan-orderapp.herokuapp.com/
+The React Client is deployed with Surge. - http://order-app.surge.sh/
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Built With
 
-## Learn More
+* [Express](https://expressjs.com/) - The web framework used
+* [React](https://reactjs.org/) - The JavaScript UI Library 
+* [NPM](https://www.npmjs.com/) - Dependency Management
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Please reach out if you would like to contribute. You can find me on github @ https://github.com/mrwhiterk
 
-### Code Splitting
+## Versioning
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+I use [SemVer](http://semver.org/) for versioning. This current version is "1.0.0"
 
-### Analyzing the Bundle Size
+## Authors
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+* **Ryan White**  - [Web Developer](https://rwhite.info/)
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+## License
 
-### Advanced Configuration
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## Acknowledgments
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* Udemy
+* The Youtubes
+* Stack Overflow

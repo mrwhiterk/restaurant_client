@@ -33,7 +33,9 @@ class Order extends Component {
               {this.state.orders.map((item, i) => (
                 <ListGroup.Item key={i} action href={`#link${i}`}>
                   <span>
-                    {!item.isActive ? 'closed' : item.completed
+                    {!item.isActive
+                      ? 'closed'
+                      : item.completed
                       ? 'done'
                       : item.submitted
                       ? 'In work'
