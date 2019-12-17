@@ -63,6 +63,27 @@ class Order extends Component {
     let activeOrders = this.state.orders.filter(x => x.isActive).length
     let archivedOrders = this.state.orders.filter(x => !x.isActive).length
 
+    let cancelOrderBtn = item => {
+      return (
+        <>
+          <Dropdown.Item onClick={cancelOrder.bind(this, item._id)}>
+            Cancel
+          </Dropdown.Item>
+          <Dropdown.Item onClick={completeOrder.bind(this, item._id)}>
+            Complete
+          </Dropdown.Item>
+        </>
+      )
+    }
+
+    let resumeBtn = item => {
+      return item.isActive ? (
+        <Dropdown.Item onClick={resumeOrder.bind(this, item._id)}>
+          Resume
+        </Dropdown.Item>
+      ) : null;
+    }
+
     let content = (
       <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
         <Row>
@@ -131,27 +152,9 @@ class Order extends Component {
                             <Dropdown.Menu>
                               {!item.completed ? (
                                 item.submitted ? (
-                                  <>
-                                    <Dropdown.Item
-                                      onClick={cancelOrder.bind(this, item._id)}
-                                    >
-                                      Cancel
-                                    </Dropdown.Item>
-                                    <Dropdown.Item
-                                      onClick={completeOrder.bind(
-                                        this,
-                                        item._id
-                                      )}
-                                    >
-                                      Complete
-                                    </Dropdown.Item>
-                                  </>
+                                  cancelOrderBtn(item)
                                 ) : (
-                                  <Dropdown.Item
-                                    onClick={resumeOrder.bind(this, item._id)}
-                                  >
-                                    Resume
-                                  </Dropdown.Item>
+                                  resumeBtn(item)
                                 )
                               ) : (
                                 <Dropdown.Item
@@ -163,6 +166,7 @@ class Order extends Component {
                                   Mark Incomplete
                                 </Dropdown.Item>
                               )}
+
                               {item.isActive ? (
                                 <Dropdown.Item
                                   onClick={archive.bind(this, item._id)}
