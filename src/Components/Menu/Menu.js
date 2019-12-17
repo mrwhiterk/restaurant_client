@@ -300,7 +300,7 @@ class Menu extends Component {
               />
             </div>
             {this.state.currentOrder.length ? (
-              <Button variant="outline-primary" onClick={this.orderCheckout}>
+              <Button variant="success" onClick={this.orderCheckout}>
                 Place Order
               </Button>
             ) : null}
